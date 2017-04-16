@@ -1,6 +1,6 @@
 {
   "name": "@richardo2016/js",
-  "version": "0.0.1-alpha",
+  "version": "0.0.1-alpha-e484f259",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -10,6 +10,10 @@
     "richardo2016",
     "js"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:richardo2016/libjs.git"
+  },
   "author": "Chen Lei <richardo2016@gmail.com>",
   "license": "MIT"
 }
