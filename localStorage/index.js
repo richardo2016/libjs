@@ -1,0 +1,99 @@
+let { localStorage } = window
+
+export default class Storage {
+  constructor (dbName, options) {
+    if (!localStorage) {
+      return
+    }
+
+    let { saveInterval = 2000 } = options || {}
+
+    dbName = dbName || 'default'
+
+    this.hasChanged = false
+    this.store = {}
+    this.dbName = 'localStorageORM/' + dbName
+
+    if (typeof localStorage === 'object') {
+      this.hasLocalStorage = true
+
+      // delayed storage read
+      setTimeout(() => {
+        let db = localStorage.getItem(dbName)
+        if (db) {
+          this.store = JSON.parse(db)
+        }
+      }, 1)
+
+      // save interval
+      setInterval(() => {
+        if (this.hasChanged) {
+          localStorage.setItem(dbName, JSON.stringify(this.store))
+          this.hasChanged = false
+        }
+      }, saveInterval)
+    }
+
+    return this
+  }
+
+  get (key) {
+    return key ? this.store[key] : this.store
+  }
+
+  set (key, data) {
+    this.store[key] = data
+    this.hasChanged = true
+  }
+
+  delete (key) {
+    if (this.store.hasOwnProperty(key)) {
+        delete this.store[key]
+    }
+  }
+
+  find (attribute, value) {
+    let i, iMax, result
+
+    result = []
+
+    for (i = 0, iMax = this.store.length; i < iMax; i++) {
+      if (this.store[i][attribute] && this.store[i][attribute] === value) {
+        result.push(this.store[i])
+      }
+    }
+
+    return result
+  }
+
+  each (callback) {
+    let key
+
+    for (key in this.store) {
+      if (this.store.hasOwnProperty(key)) {
+        callback.bind(this, key, this.store[key])
+      }
+    }
+  }
+}
+
+/*******************
+ Usage
+ *******************/
+
+// // Initiate
+// let users = new localStorageORM("users" /* database name */, 1000 /* save interval in ms */)
+//
+// // Set value to key
+// users.set("eva" /* key */, {hair: "brown", eyes: "green"} /* value */)
+//
+// // Get value by key
+// eva = users.get("eva" /*key */)
+//
+// // Get an array of documents by attribute.
+// brownHairedPeople = users.find("hair" /* attribute */, "brown" /* value */)
+//
+// // For each document, call a function
+// users.each(function(key, data) {
+//   console.log(key, data)
+// })

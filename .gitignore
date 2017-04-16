@@ -1,0 +1,64 @@
+# ignore the app subdirectory/submodules
+app/**/*
+!app/.gitkeep
+apps/**/*
+!apps/.gitkeep
+
+.DS_Store
+node_modules/
+npm-debug.log*
+selenium-debug.log
+test/unit/coverage
+test/e2e/reports
+
+# IDE specified
+*.sublime-*
+.idea/*
+.vscode/*
+
+.md
+
+# testLog
+test.log
+
+#ignore thumbnails created by windows
+Thumbs.db
+#Ignore files build by Visual Studio
+*.obj
+*.exe
+*.pdb
+*.user
+*.aps
+*.pch
+*.vspscc
+*_i.c
+*_p.c
+*.ncb
+*.suo
+*.tlb
+*.tlh
+*.bak
+*.cache
+*.ilk
+*.log
+[Bb]in
+[Dd]ebug*/
+*.lib
+*.sbr
+obj/
+[Rr]elease*/
+_ReSharper*/
+[Tt]est[Rr]esult*
+dist/*
+conf.d/*
+.gitmodules
+
+# webpack
+app-container/*
+app-containers/*
+
+# yaml config file but config-template-file
+.wps.yaml
+.wm.yaml
+
+wm_modules

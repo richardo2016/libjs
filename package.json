@@ -1,0 +1,15 @@
+{
+  "name": "@richardo2016/js",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "keywords": [
+    "richardo2016",
+    "js"
+  ],
+  "author": "Chen Lei <richardo2016@gmail.com>",
+  "license": "MIT"
+}
