@@ -168,7 +168,7 @@ R.postFile = async (url = '', payload = {}, options = {}) => {
 
   if (!file) return error('no valid file Given')
 
-  let body = new FormData(payload)
+  let body = new window.FormData(payload)
   for (let key in payload) {
     // console.info(key, payload[key])
     body.append(key, payload[key])
