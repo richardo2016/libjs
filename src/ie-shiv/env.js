@@ -1,3 +1,4 @@
+/* eslint-disable */
 // cross environment
 if (typeof window === 'undefined') {
   window = {}
@@ -8,42 +9,33 @@ export let {userAgent: UA} = window.navigator || {}
 export let isWin = UA.toLowerCase().indexOf('windows') > -1
 export let isIE = /*@cc_on!@*/false || UA.indexOf('MSIE') > -1
 // http://stackoverflow.com/questions/31757852/how-can-i-detect-internet-explorer-ie-and-microsoft-edge-using-javascript
-
-export let ieVersion
-
 export let checkIEVersion = () => {
-  var rv = -1; // Return value assumes failure.
+  var rv = -1 // Return value assumes failure.
 
   if (navigator.appName == 'Microsoft Internet Explorer'){
 
     var ua = navigator.userAgent,
-      re  = new RegExp('MSIE ([0-9]{1,}[\\.0-9]{0,})');
+      re  = new RegExp('MSIE ([0-9]{1,}[\\.0-9]{0,})')
 
     if (re.exec(ua) !== null){
-     rv = parseFloat( RegExp.$1 );
+     rv = parseFloat( RegExp.$1 )
     }
   }
   else if(navigator.appName == "Netscape"){
     /// in IE 11 the navigator.appVersion says 'trident'
     /// in Edge the navigator.appVersion does not say trident
-    if(navigator.appVersion.indexOf('Trident') === -1) rv = 12;
-    else rv = 11;
+    if(navigator.appVersion.indexOf('Trident') === -1) rv = 12
+    else rv = 11
   }
 
-  ieVersion = rv
-  return rv;
+  return {
+    rv,
+    lteIE8: isIE && ieVersion <= 8 || ( UA.indexOf('MSIE 6.0') > -1 || UA.indexOf('MSIE 7.0') > -1 || UA.indexOf('MSIE 8.0') > -1 )
+  }
 }
-ieVersion = checkIEVersion()
+/* eslint-enable */
 
-export let lteIE8 = isIE && ieVersion <= 8 ||
-             (
-              UA.indexOf('MSIE 6.0') > -1 ||
-              UA.indexOf('MSIE 7.0') > -1 ||
-              UA.indexOf('MSIE 8.0') > -1
-             )
-
-export let bodyClasses = [
-  isIE ? 'ie-browser' : 'non-ie',
-  ieVersion ? `ie-browser-${ieVersion}` : '',
-  lteIE8 ? 'ie-lte8' : ''
-].filter(x => x)
+//   isIE ? 'ie-browser' : 'non-ie',
+//   ieVersion ? `ie-browser-${ieVersion}` : '',
+//   lteIE8 ? 'ie-lte8' : ''
+// ].filter(x => x)

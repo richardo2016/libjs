@@ -1,5 +1,5 @@
 import { secretifyObj } from '../node/object'
-import * as utilPagination from 'wm/lib/js/pagination'
+import * as utilPagination from '../pagination'
 
 export class PaginationSrc {
   constructor (initObj = {}) {
@@ -79,7 +79,7 @@ export class PaginationSrc {
     if (page === 'next') return this.beforeNext(rest)
     if (page === 'prev') return this.beforePrev(rest)
 
-    let { strict = true} = options || {}
+    let { strict = true } = options || {}
     let { offset, size, total } = this.pagination
 
     let _nextOffset = (offset - 1) * size

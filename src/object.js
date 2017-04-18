@@ -1,10 +1,9 @@
 import { lteIE8 } from './ie-shiv/env'
-import { print } from './cross-browser.js'
 import * as nodeObject from './node/object.js'
 
 export let filterObj = (obj, options) => {
   if (!obj || typeof obj !== 'object') {
-    print('non-empty object expected', 'warn')
+    console.warn('non-empty object expected', 'warn')
     return obj
   }
 

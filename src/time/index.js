@@ -88,7 +88,7 @@ export const computeTimeFilter = (time_filter) => {
       }
   }
 
-  if (typeof time_filter === 'number' && time_filter >= 0 || time_filter instanceof Date) {
+  if ((typeof time_filter === 'number' && time_filter >= 0) || time_filter instanceof Date) {
     return ensureMoment(time_filter)
   } else if (isTimeRangeStr(time_filter)) { // deal with timeRange based string from localStorage
     let [beginDateStr, endDateStr] = time_filter.split(','),

@@ -12,8 +12,8 @@ export const computeListPagination = (total, offset = 0, size = 20) => {
   size = (size <= 0 || typeof size !== 'number') ? 1 : size
 
   let curPage  = offset / size,
-    firstPage = 0,
-    lastPage = parseInt(total / size) - Number(!(total / size - parseInt(total / size)))
+      firstPage = 0,
+      lastPage = parseInt(total / size) - Number(!(total / size - parseInt(total / size)))
 
   if (lastPage < firstPage) lastPage = firstPage
 
@@ -38,7 +38,7 @@ export const computeListPagination = (total, offset = 0, size = 20) => {
 
   pagination.canPrevEtc = ({navCount = 1, firstNav = pagination.firstPage}) => {
     let half = parseInt(navCount / 2),
-        min = Math.min(pagination.curPage, pagination.len)
+        min = Math.min(pagination.curPage, pagination.len),
         offset = min - half
 
     return offset >= 1 && firstNav < offset

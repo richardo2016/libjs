@@ -27,7 +27,7 @@ actions.close = (callback) => {
     return false
   }
 
-  let fn = typeof callback === 'function' && callback || (() => {})
+  let fn = typeof callback === 'function' ? callback : () => {}
 
   window.WeixinJSBridge.invoke('closeWindow', {}, fn)
   return true

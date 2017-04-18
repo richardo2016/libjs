@@ -9,9 +9,9 @@ if (!window.fetch) {
 
 let { fetch } = window
 
-import { error, isResponse } from './response'
-import { jsonToParams as normalizeParams } from './params'
-import { secretObj, SetObjPropertyQuietly } from './object'
+import { error, isResponse } from './response' // eslint-disable
+import { jsonToParams as normalizeParams } from './params' // eslint-disable
+import { secretObj, SetObjPropertyQuietly } from './object' // eslint-disable
 
 export const fixUrlStart = (url = '', options) => {
   if (url.substr(0, 1) !== '/' && !/^https?:\/\//.test(url)) {
@@ -203,7 +203,7 @@ R.delete = (url = '', payload = {}, options = {}) => {
     credentials: 'include', // default sessions
     ...options.fetchOptions,
     headers: {
-      ...options.headers,
+      ...options.headers
       // 'Content-Type': 'application/x-www-form-urlencoded'
     },
     // 考察 IE 8 下是否有编码问题

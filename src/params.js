@@ -7,7 +7,7 @@ export let warnParam = (param, options) => {
     options = {type: options}
   }
 
-  let { check_empty = true, param_name = 'param', context = 'request', type = '', proto } = options || {}
+  let { check_empty = true, param_name = 'param', context = 'request', proto } = options || {}
   let errMsgs
 
   if (check_empty && !param) {
@@ -16,10 +16,10 @@ export let warnParam = (param, options) => {
   }
 
   // TODO: check `type` is in basic type of Javascript
-  if (type && typeof type === 'string' && typeof param !== type) {
-    errMsgs = `${param_name}'s type should be ${type} in ${context}.`
-    return new Error(`warn_type_cb: ${errMsgs}`)
-  }
+  // if (type && (typeof type === 'string') && (typeof param !== type)) {
+  //   errMsgs = `${param_name}'s type should be ${type} in ${context}.`
+  //   return new Error(`warn_type_cb: ${errMsgs}`)
+  // }
 
   if (proto && !(param instanceof proto)) {
     errMsgs = `${param_name} should be instance of ${proto.toString()} in ${context}.`
@@ -148,5 +148,5 @@ export const getQuries = () => {
     let [key, value] = arr[i].split('=')
     query[key] = value
   }
-  query
+  return query
 }

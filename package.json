@@ -1,8 +1,7 @@
 {
   "name": "@richardo2016/js",
-  "version": "0.0.1-alpha-e484f259",
+  "version": "0.0.1-alpha-f2dcd6c0",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "test": "test"
   },
@@ -15,5 +14,9 @@
     "url": "git@github.com:richardo2016/libjs.git"
   },
   "author": "Chen Lei <richardo2016@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "fetch-ie8": "^1.5.0",
+    "moment": "^2.18.1"
+  }
 }

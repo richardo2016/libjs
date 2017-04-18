@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 /**
  * fwps flux module protocol
  *
@@ -72,29 +74,30 @@ export function relPathToNsAndModuleKey (relFilePath, options) {
   let { filter, filterNamespace, filterModuleKey } = options || {}
 
   let namespace = relFilePath
-    if (namespace.indexOf('./') === 0) {
-      namespace = namespace.substr('./'.length)
-    }
 
-    let extensionPos = namespace.length - '.js'.length
-    if (namespace.substr(extensionPos) === '.js') {
-      namespace = namespace.substr(0, extensionPos)
-    }
+  if (namespace.indexOf('./') === 0) {
+    namespace = namespace.substr('./'.length)
+  }
 
-    if (typeof filterNamespace === 'function') {
-      namespace = filterNamespace(namespace)
-    }
+  let extensionPos = namespace.length - '.js'.length
+  if (namespace.substr(extensionPos) === '.js') {
+    namespace = namespace.substr(0, extensionPos)
+  }
 
-    let module_key = namespace.replace('/', '.')
+  if (typeof filterNamespace === 'function') {
+    namespace = filterNamespace(namespace)
+  }
 
-    if (typeof filterModuleKey === 'function') {
-      module_key = filterModuleKey(module_key)
-    }
+  let module_key = namespace.replace('/', '.')
 
-    let module_descriptor = { module_key, namespace }
+  if (typeof filterModuleKey === 'function') {
+    module_key = filterModuleKey(module_key)
+  }
 
-    if (typeof filter === 'function') filter(module_descriptor)
-    return module_descriptor
+  let module_descriptor = { module_key, namespace }
+
+  if (typeof filter === 'function') filter(module_descriptor)
+  return module_descriptor
 }
 
 export function ensureMObject ({exportContent}) {
@@ -133,7 +136,7 @@ no valid 'types' Object found \
 in exports of module:'${exportContent.M.GETTER_KEY}'\
 or its 'M' object.\nit would be fixed\
 by being assigned 'types' to its 'M' object.\
-      `)
+    `)
 
   }
 

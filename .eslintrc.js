@@ -1,7 +1,11 @@
 var DISABLE_DEV_NO_UNUSED_VARS = false
 
 module.exports = {
-  root: false,
+  root: true,
+  parser: 'babel-eslint',
+  parserOptions: {
+    sourceType: 'module'
+  },
   // https://github.com/feross/standard/blob/master/RULES.md#javascript-standard-style
   extends: 'standard',
   // required to lint *.vue files
@@ -10,6 +14,7 @@ module.exports = {
   ],
   // add your custom rules here
   'rules': {
+    "import/first": [0],
     // Override our default settings just for this directory
     "eqeqeq": 0,
     // allow paren-less arrow functions

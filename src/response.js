@@ -43,11 +43,11 @@ export default class ResponseBase {
     this[this.$dataKey] = data || ''
   }
 
-  get get() {
+  get get () {
     return {
       [this.$codeKey]: this[this.$codeKey],
       [this.$messageKey]: this[this.$messageKey],
-      [this.$dataKey]: this[this.$dataKey],
+      [this.$dataKey]: this[this.$dataKey]
     }
   }
 
