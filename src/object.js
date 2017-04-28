@@ -1,4 +1,4 @@
-import { lteIE8 } from './ie-shiv/env'
+import { checkIEVersion } from './ie-shiv/env'
 import * as nodeObject from './node/object.js'
 
 export let filterObj = (obj, options) => {
@@ -20,7 +20,7 @@ export let filterObj = (obj, options) => {
   }
 }
 export const solidObj = (obj, propertyName, value, options) => {
-  options.lteIE8 = lteIE8
+  options.lteIE8 = checkIEVersion().lteIE8
   return nodeObject.solidifyObj(obj, propertyName, value, options)
 }
 
@@ -51,8 +51,6 @@ export const StrArray2Object = (arr, options) => {
     mainKeys
   } : object
 }
-
-export const valueInObj = nodeObject.valueInObj
 
 // -------------------------------------- object check utils ----------------------------------------//
 
