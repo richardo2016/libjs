@@ -6,7 +6,7 @@ export default class Storage {
       return
     }
 
-    let { saveInterval = 2000 } = options || {}
+    let { syncInterval = 2000 } = options || {}
 
     dbName = dbName || 'default'
 
@@ -18,23 +18,25 @@ export default class Storage {
       this.hasLocalStorage = true
 
       // delayed storage read
-      setTimeout(() => {
-        let db = localStorage.getItem(dbName)
-        if (db) {
-          this.store = JSON.parse(db)
-        }
-      }, 1)
+      setTimeout(() => this.update(), 1)
 
       // save interval
       setInterval(() => {
         if (this.hasChanged) {
-          localStorage.setItem(dbName, JSON.stringify(this.store))
+          localStorage.setItem(this.dbName, JSON.stringify(this.store))
           this.hasChanged = false
         }
-      }, saveInterval)
+      }, syncInterval)
     }
 
     return this
+  }
+
+  update () {
+    let db = localStorage.getItem(this.dbName)
+    if (db) {
+      this.store = JSON.parse(db)
+    }
   }
 
   get (key) {
@@ -48,7 +50,7 @@ export default class Storage {
 
   delete (key) {
     if (this.store.hasOwnProperty(key)) {
-        delete this.store[key]
+      delete this.store[key]
     }
   }
 
