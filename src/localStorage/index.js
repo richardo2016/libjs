@@ -48,7 +48,7 @@ export default class Storage {
 
   delete (key) {
     if (this.store.hasOwnProperty(key)) {
-        delete this.store[key]
+      delete this.store[key]
     }
   }
 
