@@ -19,22 +19,26 @@ export default class Storage {
 
       // delayed storage read
       setTimeout(() => {
-        let db = localStorage.getItem(dbName)
-        if (db) {
-          this.store = JSON.parse(db)
-        }
+        this.update()
       }, 1)
 
       // save interval
       setInterval(() => {
         if (this.hasChanged) {
-          localStorage.setItem(dbName, JSON.stringify(this.store))
+          localStorage.setItem(this.dbName, JSON.stringify(this.store))
           this.hasChanged = false
         }
       }, saveInterval)
     }
 
     return this
+  }
+
+  update () {
+    let db = localStorage.getItem(this.dbName)
+    if (db) {
+      this.store = JSON.parse(db)
+    }
   }
 
   get (key) {
