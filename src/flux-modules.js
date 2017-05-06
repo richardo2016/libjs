@@ -194,6 +194,6 @@ export function normalizeGettersAndActionsOfExportContent ({exportContent}) {
       noHash[newKey] = origKey
     })
     exportContent.actions = actions
-    exportContent.noHashOfGctions = noHash
+    exportContent.noHashOfActions = noHash
   }
 }
