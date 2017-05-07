@@ -25,7 +25,7 @@ export default class Storage {
       // save interval
       setInterval(() => {
         if (this.hasChanged) {
-          localStorage.setItem(this.dbName, JSON.stringify(this.store))
+          this.sync()
           this.syncEnd()
         }
       }, saveInterval)
@@ -44,6 +44,10 @@ export default class Storage {
 
   syncStart () {
     this.hasChanged = true
+  }
+
+  sync () {
+    localStorage.setItem(this.dbName, JSON.stringify(this.store))
   }
 
   syncEnd () {
