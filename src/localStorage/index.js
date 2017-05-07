@@ -26,7 +26,7 @@ export default class Storage {
       setInterval(() => {
         if (this.hasChanged) {
           localStorage.setItem(this.dbName, JSON.stringify(this.store))
-          this.hasChanged = false
+          this.syncEnd()
         }
       }, saveInterval)
     }
@@ -39,6 +39,15 @@ export default class Storage {
     if (db) {
       this.store = JSON.parse(db)
     }
+    return this.store
+  }
+
+  syncStart () {
+    this.hasChanged = true
+  }
+
+  syncEnd () {
+    this.hasChanged = false
   }
 
   get (key) {
@@ -47,12 +56,13 @@ export default class Storage {
 
   set (key, data) {
     this.store[key] = data
-    this.hasChanged = true
+    this.syncStart()
   }
 
   delete (key) {
     if (this.store.hasOwnProperty(key)) {
       delete this.store[key]
+      this.syncStart()
     }
   }
 

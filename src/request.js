@@ -49,9 +49,9 @@ export const R = {}
 R.checkResponse = (response) => {
   if (!response.ok) {
     // TOOD: check if request question
-    let res = error('Server Error')
-    res.data = response
-    return res.json()
+    let jsonData = error('Server Error')
+    jsonData.data = response
+    return jsonData.json()
   }
 
   return response.json()
