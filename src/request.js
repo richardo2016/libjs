@@ -49,9 +49,9 @@ export const R = {}
 R.checkResponse = (response) => {
   if (!response.ok) {
     // TOOD: check if request question
-    let res = error('服务发生错误，请联系系统管理员')
-    res.data = response
-    return res.json()
+    let jsonData = error('Server Error')
+    jsonData.data = response
+    return jsonData.json()
   }
 
   return response.json()

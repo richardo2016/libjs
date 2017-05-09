@@ -27,7 +27,7 @@ export function genVuexModules (webpackRequireContext = {}, options) {
     }
 
     // TODO: 重复键名检测
-    let exportContent = webpackRequireContext(key)
+    let exportContent = {...webpackRequireContext(key)}
 
     module_key = fluxModules.prefixer({module_name: module_key, module_prefix})
     module_key = fluxModules.suffixer({module_name: module_key, module_suffix})

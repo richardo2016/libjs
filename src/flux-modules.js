@@ -20,6 +20,8 @@ export let fixMObject = (M, {module_key, namespace = '', MGetter}) => {
   M.MODULE_PREIX = `${module_key}_`
   M.PREFIX = M.MODULE_PREIX
   M.NAMESPACE = namespace || module_key
+  M.namedGetter = namedGetter
+
   if (MGetter) M.MGetter = MGetter
   if (typeof M.initializer === 'function') M.initializer({module_key, prefix: M.PREFIX, namespace: M.NAMESPACE})
   return M
@@ -194,6 +196,12 @@ export function normalizeGettersAndActionsOfExportContent ({exportContent}) {
       noHash[newKey] = origKey
     })
     exportContent.actions = actions
-    exportContent.noHashOfGctions = noHash
+    exportContent.noHashOfActions = noHash
+  }
+}
+// M utils
+export function namedGetter (name) {
+  return (state) =>  {
+    return state[name]
   }
 }
