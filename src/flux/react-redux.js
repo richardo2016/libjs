@@ -157,11 +157,13 @@ export const connectFlux = function (options) {
            *
            */
           let rootState = $store.getState(), { __module_key__ } = actions[action_key]
-          let scopedState = {...$store}
+          let scopedCtx = {...$store}
           if (__module_key__) {
-            scopedState.state = rootState[__module_key__]
+            scopedCtx.state = rootState[__module_key__]
+            scopedCtx.rootState = rootState
+            scopedCtx.ownProps = ownProps
           }
-          let reduxActionReturnValue = actions[action_key]({state: scopedState, rootState, ownProps}, ...args)
+          let reduxActionReturnValue = actions[action_key](scopedCtx, ...args)
           if (!(reduxActionReturnValue instanceof Promise)) {
             // TODO: check whether the type in all types in system
             if (typeof reduxActionReturnValue === 'object') {
@@ -184,7 +186,7 @@ export const connectFlux = function (options) {
     return {
       ...typeof mergeDispatchToProps === 'function' ? mergeDispatchToProps(dispatch, ownProps) : {},
       ...convertedActions,
-      dispatch, // always return dispatch
+      $dispatch: dispatch, // always return dispatch
       $store, // pass $store just like vuex
     }
   }
