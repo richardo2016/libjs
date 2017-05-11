@@ -88,6 +88,7 @@ export const connectFlux = function (options) {
     store: $store, // store is just the combined reducers in react-redux
     warnNoStore = true,
     reactReduxOrig,
+    mixins = {},
   } = options || {}, {
     withRef = true,
     pure = true,
@@ -217,13 +218,14 @@ export const connectFlux = function (options) {
   // http://redux.js.org/docs/react-redux/api.html
   let ofFlux_mergeProps = (stateProps, dispatchProps, ownProps) => {
     if (typeof mergeProps === 'function') {
-      return mergeProps(stateProps, dispatchProps, ownProps)
+      return Object.assign(mergeProps(stateProps, dispatchProps, ownProps), mixins)
     } else {
       if (typeof propsToState !== 'function') {propsToState = () => {}}
       return {
         ...ownProps,
         ...stateProps,
         ...dispatchProps,
+        ...mixins,
         /**
          * resolve the problem repeating to tranfer props to state manually
          * in `componentWillReceiveProps` and `constructor`/`getInitialState`
@@ -284,13 +286,15 @@ export const defaultPropsToState = (props) => {
 
 export const connectStoreFactory = (store, factory_options) => {
   store.commit = (...args) => { storeCommit(store, ...args) }
+  let { mixins: _mixins = {} } = factory_options || {}
 
   return function (options) { // useful connectFlux
-    let { component } = options
+    let { component, mixins = {} } = options
     delete options.component
 
+    Object.assign(mixins, _mixins)
     // actual connectFlux
-    let connectComponentFn = connectFlux({ ...options, store })
+    let connectComponentFn = connectFlux({ ...options, mixins, store })
     return Component.isPrototypeOf(component) ? connectComponentFn(component) : connectComponentFn
   }
 }
