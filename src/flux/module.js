@@ -22,6 +22,9 @@ export let fixMObject = (M, {module_key, namespace = '', MGetter, delimeter = '/
   M.NAMESPACE = namespace || module_key
   M.namedGetter = namedGetter
 
+  // TODO: feature in the future
+  // modules[module_key].M.toString = modules[module_key].M.valueOf = () => module_key
+
   if (MGetter) M.MGetter = MGetter
   if (typeof M.initializer === 'function') M.initializer({module_key, prefix: M.PREFIX, namespace: M.NAMESPACE})
   return M

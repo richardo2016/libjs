@@ -57,6 +57,8 @@ export function genFluxModulesWithReducer (fcHash, options) {
     fluxModules.normalizeGettersAndActionsOfExportContent({exportContent, onNewAction, onNewGetter})
 
     modules[module_key] = exportContent.default = exportContent
+    modules[module_key].toString = modules[module_key].valueOf = () => exportContent.M.PREFIX
+    modules[module_key].M.toString = modules[module_key].M.valueOf = () => module_key
     reducerOrigDefaultFn = convertMutationToReducerFn({module_key, module: modules[module_key], reducerFn: emptyReucerGen({...exportContent.state})})
     // reducers[module_key] = {default: reducerOrigDefaultFn}
     reducers[module_key] = reducerOrigDefaultFn
