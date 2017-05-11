@@ -15,9 +15,9 @@
 
 /* ============================= UTILS ================================ */
 // add or fix the 'M' object of module to
-export let fixMObject = (M, {module_key, namespace = '', MGetter}) => {
+export let fixMObject = (M, {module_key, namespace = '', MGetter, delimeter = '/'}) => {
   M.GETTER_KEY = module_key
-  M.MODULE_PREIX = `${module_key}_`
+  M.MODULE_PREIX = `${module_key}${delimeter}`
   M.PREFIX = M.MODULE_PREIX
   M.NAMESPACE = namespace || module_key
   M.namedGetter = namedGetter
