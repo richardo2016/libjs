@@ -121,7 +121,7 @@ export function noHashAddon (obj, {origKey, newKey, addon_type = 'module_addon'}
   }
 }
 
-export const normalizeTypesAndMutationsOfExportContent = ({exportContent}) => {
+export const normalizeTypesAndMutationsOfExportContent = ({exportContent, onNewMutation}) => {
   ensureMObject({exportContent})
 
   let types, mutations, typeFromM = false
@@ -144,12 +144,14 @@ by being assigned 'types' to its 'M' object.\
 
   if (typeof types === 'object') {
     mutations = {}
+    let callback = typeof onNewMutation === 'function'
     prefixTypes({
       types,
       prefix: exportContent.M.MODULE_PREIX,
       onGenNewkey: !exportContent.mutations ? () => {} : ({type_key, old_type, new_type}) => {
         if (exportContent.mutations.hasOwnProperty(old_type)) {
           mutations[new_type] = exportContent.mutations[old_type]
+          callback && onNewMutation({exportContent, module_key: exportContent.M.GETTER_KEY, mutation: mutations[new_type], new_type, old_type})
           noHashAddon(mutations[new_type], {origKey: old_type, newKey: new_type, addon_type: 'mutation'})
         }
       }
@@ -171,32 +173,32 @@ by being assigned 'types' to its 'M' object.\
   }
 }
 
-export function normalizeGettersAndActionsOfExportContent ({exportContent}) {
+export function normalizeGettersAndActionsOfExportContent ({exportContent, onNewAction, onNewGetter}) {
   // TODO: mark if M ensured
   ensureMObject({exportContent})
 
   if (exportContent.getters) {
-    let getters = {}, noHash = {}
+    let getters = {}
+    let callback = typeof onNewGetter === 'function'
     Object.keys(exportContent.getters).forEach((origKey) => {
       let newKey = `${exportContent.M.MODULE_PREIX}${origKey}`
       getters[newKey] = exportContent.getters[origKey]
-      noHashAddon(getters[newKey], {origKey, newKey, addon_type: 'getter'})
-      noHash[newKey] = origKey
+      callback && onNewGetter({exportContent, module_key: exportContent.M.GETTER_KEY, getter: getters[newKey], newKey, origKey})
+      // noHashAddon(getters[newKey], {origKey, newKey, addon_type: 'getter'})
     })
     exportContent.getters = getters
-    exportContent.noHashOfGetters = noHash
   }
 
   if (exportContent.actions) {
-    let actions = {}, noHash = {}
+    let actions = {}
+    let callback = typeof onNewAction === 'function'
     Object.keys(exportContent.actions).forEach((origKey) => {
       let newKey = `${exportContent.M.MODULE_PREIX}${origKey}`
       actions[newKey] = exportContent.actions[origKey]
-      noHashAddon(actions[newKey], {origKey, newKey, addon_type: 'action'})
-      noHash[newKey] = origKey
+      callback && onNewAction({exportContent, module_key: exportContent.M.GETTER_KEY, action: actions[newKey], newKey, origKey})
+      // noHashAddon(actions[newKey], {origKey, newKey, addon_type: 'action'})
     })
     exportContent.actions = actions
-    exportContent.noHashOfActions = noHash
   }
 }
 // M utils

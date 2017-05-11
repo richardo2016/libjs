@@ -1,9 +1,70 @@
 import { Component } from 'react'
-import { connect as orig_connect } from 'react-redux'
+import { connect as origConnect } from 'react-redux'
+import * as fluxModules from './module'
 
-export const vuexLikeConnect = (options) => {
-  let { usePropsToState = false } = options
+export function genFluxModulesWithReducer (fcHash, options) {
+  let modules = {},
+      {
+        reducers = {},
+        prefix: module_prefix = '',
+        suffix: module_suffix = ''
+      } = options || {}
 
+  let onNewMutation = function ({module_key, mutation, new_type, old_type}) {
+    // console.info('onNewMutation', {mutation, new_type, old_type})
+    mutation.__module_key__ = module_key
+  }
+
+  let onNewAction = function ({module_key, action, newKey, origKey}) {
+    // console.info('onNewAction', {action, newKey, origKey})
+    action.__module_key__ = module_key
+  }
+
+  let onNewGetter = function ({module_key, getter, newKey, origKey}) {
+    // console.info('onNewGetter', module_key, getter, newKey, origKey)
+    getter.__module_key__ = module_key
+  }
+
+  for (let filepath in fcHash) {
+    if (filepath === './index.js') {
+      return
+    }
+
+    let { namespace, module_key } = fluxModules.relPathToNsAndModuleKey(filepath, {
+      filterNamespace: (ns) => ns.replace(/\/index$/, '')
+    })
+
+    if (modules.hasOwnProperty(module_key)) {
+      console.warn(`module ${module_key} has exist in the modules, check your input webpackRequireContext object and remove the equivant vuex2-style module file.`)
+      return
+    }
+
+    // TODO: 重复键名检测
+    let exportContent = {...fcHash[filepath]}
+
+    module_key = fluxModules.prefixer({module_name: module_key, module_prefix})
+    module_key = fluxModules.suffixer({module_name: module_key, module_suffix})
+
+    fluxModules.fixMObject(exportContent.M, {
+      module_key,
+      namespace,
+      MGetter: () => exportContent
+    })
+
+    // correspond to the mutations
+    fluxModules.normalizeTypesAndMutationsOfExportContent({exportContent, onNewMutation})
+    fluxModules.normalizeGettersAndActionsOfExportContent({exportContent, onNewAction, onNewGetter})
+
+    modules[module_key] = exportContent.default = exportContent
+    reducerOrigDefaultFn = convertMutationToReducerFn({module_key, module: modules[module_key], reducerFn: emptyReucerGen({...exportContent.state})})
+    // reducers[module_key] = {default: reducerOrigDefaultFn}
+    reducers[module_key] = reducerOrigDefaultFn
+  }
+
+  return modules
+}
+
+export const connectFlux = function (options) {
   let {
     getters = {},
     /**
@@ -19,20 +80,19 @@ export const vuexLikeConnect = (options) => {
      */
     actions = {},
     // TODO check if component is React Component
-    propsToState = usePropsToState && defaultPropsToState,
-    store: $store,
-    warn_no_store = false,
-    connect: orig_connect_options,
-    slave: $slave
+    propsToState = defaultPropsToState,
+    store: $store, // store is just the combined reducers in react-redux
+    warnNoStore = true,
+    reactReduxOrig,
   } = options || {}, {
     withRef = true,
     pure = true,
     mergeStateToProps,
     mergeDispatchToProps,
     mergeProps,
-  } = orig_connect_options || {}
+  } = reactReduxOrig || {}
 
-  if (warn_no_store && (!$store || typeof $store.getState !== 'function')) {
+  if (warnNoStore && (!$store || typeof $store.getState !== 'function')) {
     console.warn('no effective store given, if you want to use $store in React Component, pass it in options')
   }
 
@@ -41,7 +101,7 @@ export const vuexLikeConnect = (options) => {
     getters = {}
   }
 
-  let o_mergeStateToProps = (state, ownProps) => {
+  let ofFlux_mergeStateToProps = (state, ownProps) => {
     let computedState = {},
         $state = {
           ...state,
@@ -84,7 +144,7 @@ export const vuexLikeConnect = (options) => {
     }
   }
 
-  let o_mergeDispatchToProps = (dispatch, ownProps) => {
+  let ofFlux_mergeDispatchToProps = (dispatch, ownProps) => {
     let convertedActions = {}
 
     for (let action_key in actions) {
@@ -97,7 +157,11 @@ export const vuexLikeConnect = (options) => {
            *
            */
           let rootState = $store.getState(), { __module_key__ } = actions[action_key]
-          let reduxActionReturnValue = actions[action_key]({...$store, ...__module_key__ && {state: rootState[__module_key__]}, rootState, ownProps}, ...args)
+          let scopedState = {...$store}
+          if (__module_key__) {
+            scopedState.state = rootState[__module_key__]
+          }
+          let reduxActionReturnValue = actions[action_key]({state: scopedState, rootState, ownProps}, ...args)
           if (!(reduxActionReturnValue instanceof Promise)) {
             // TODO: check whether the type in all types in system
             if (typeof reduxActionReturnValue === 'object') {
@@ -122,16 +186,16 @@ export const vuexLikeConnect = (options) => {
       ...convertedActions,
       dispatch, // always return dispatch
       $store, // pass $store just like vuex
-      ...$slave && { $slave }
     }
   }
 
   // http://redux.js.org/docs/react-redux/api.html
-  let o_mergeProps = (stateProps, dispatchProps, ownProps) => {
-    let mergedProps =
-      typeof mergeProps === 'function'
-      ? mergeProps(stateProps, dispatchProps, ownProps)
-      : {
+  let ofFlux_mergeProps = (stateProps, dispatchProps, ownProps) => {
+    if (typeof mergeProps === 'function') {
+      return mergeProps(stateProps, dispatchProps, ownProps)
+    } else {
+      if (typeof propsToState !== 'function') {propsToState = () => {}}
+      return {
         ...ownProps,
         ...stateProps,
         ...dispatchProps,
@@ -139,24 +203,21 @@ export const vuexLikeConnect = (options) => {
          * resolve the problem repeating to tranfer props to state manually
          * in `componentWillReceiveProps` and `constructor`/`getInitialState`
          */
-        ...typeof propsToState === 'function' && {$propsToState: propsToState(mergedProps, {helpers: propsToStateHelpers})}
+        $propsToState: propsToState({}, {helpers: propsToStateHelpers})
       }
-
-    return mergedProps
+    }
   }
 
-  return orig_connect(
-    o_mergeStateToProps,
-    o_mergeDispatchToProps,
-    o_mergeProps,
+  return origConnect(
+    ofFlux_mergeStateToProps,
+    ofFlux_mergeDispatchToProps,
+    ofFlux_mergeProps,
     {
       withRef,
       pure
     }
   )
 }
-
-export const connect = vuexLikeConnect
 
 export const propsToStateHelpers = {
   /**
@@ -175,7 +236,6 @@ export const propsToStateHelpers = {
       }
       return component.state
     } else {
-      // console.info(component)
       component.setState({
         ...propsToBeState
       }, () => {
@@ -194,5 +254,139 @@ export const defaultPropsToState = (props) => {
     return propsToStateHelpers.setState(component, {
       $props: props
     }, {inConstructor})
+  }
+}
+
+export const connectStoreFactory = (store, factory_options) => {
+  store.commit = (...args) => { storeCommit(store, ...args) }
+
+  return function (options) { // useful connectFlux
+    let { component } = options
+    delete options.component
+
+    // actual connectFlux
+    let connectComponentFn = connectFlux({ ...options, store })
+    return Component.isPrototypeOf(component) ? connectComponentFn(component) : connectComponentFn
+  }
+}
+
+// TODO: test and improve payload style
+/**
+ * product object for mutation
+ *
+ * because the payload's keys length is uncertain,
+ * we can just pass it as one object
+ */
+export const storeCommit = (store, ...args) => {
+  let payload = [], type, style = 'payload'
+  if (!args) {
+    args = []
+  }
+
+  // maybe IE8 has problem with undefined index
+  // object-style: payload
+  if (typeof args[0] === 'object' && typeof args[0].type === 'string') {
+    type = args[0].type
+    payload = {...args[0]}
+    delete payload.type
+  } else if (typeof args[0] === 'string') {
+    type = args[0]
+    payload = args[1]
+    // payload.shift()
+    style = typeof payload === 'object' ? 'payload' : 'basic'
+  }
+
+  if (!type) {
+    console.warn(`no type supply for this ${style}-style commit`)
+    return
+  }
+
+  store.dispatch({
+    type,
+    ...payload
+  })
+}
+
+export const convertMutationToReducerFn = ({module, module_key, reducerFn}) => {
+  /**
+   * mutation is effective tools that combine
+   * reducer's actionType-statement(from mutation's key)
+   * and reducer's actionType-return-value.
+   *
+   * use case:
+   * 1. mutation definition
+   * ```
+   *   mutations: {
+   *     increment (state, n) {
+   *       state.count += n
+   *     }
+   *   }
+   * ```
+   *
+   * 2. commit it
+   *   - simple-style
+   *     ```
+   *       store.commit('INCREMENT', 1)
+   *     ```
+   * 3. with payload
+   *   definition
+   *   ```
+   *     mutations: {
+   *       increment (state, payload) {
+   *         state.count += payload.amount
+   *       }
+   *     }
+   *   ```
+   *   change it
+   *     -
+   *       ```
+   *         store.commit('type', {
+   *           amount: 10
+   *         })
+   *       ```
+   *     - object-style
+   *       ```
+   *         store.commit({
+   *           type: 'INCREMENT',
+   *           amount: 10
+   *         })
+   *       ```
+   *
+   * reference: http://vuex.vuejs.org/en/mutations.html
+   * @type {Object}
+   */
+  let mutationKeys = module.mutations && Object.keys(module.mutations) || []
+  if (mutationKeys.length) {
+    // default means reducer
+    if (typeof reducerFn === 'function') {
+      let defaultFn = reducerFn
+
+      // warning: never change the state's default value in case override the default state in corresponding module
+      reducerFn = (state = {...defaultFn(state)}, action = {}) => {
+        // TODO: support mutations to be Map and let anything to be the mutation-key
+        if (module.mutations.hasOwnProperty(action.type)) {
+          let mutation_func = module.mutations[action.type],
+              payload = {...action}
+
+          delete payload.type
+
+          // tips: 1.state must be object; 2.re-assign state from object; 3.never cover object but change itself in mutation(Javascript pointer)
+          let object = {...state}
+          mutation_func(object, payload, { reducer: defaultFn })
+          state = object
+          return state
+        }
+
+        state = defaultFn(state, action)
+        return state
+      }
+    }
+  }
+  return reducerFn
+}
+
+export function emptyReucerGen (defaultState = null) {
+  return (state = {...defaultState}, action = {}) => {
+    return state
   }
 }
