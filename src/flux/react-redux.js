@@ -13,6 +13,7 @@ export function genFluxModulesWithReducer (fcHash, options) {
   let onNewMutation = function ({module_key, mutation, new_type, old_type}) {
     // console.info('onNewMutation', {mutation, new_type, old_type})
     mutation.__module_key__ = module_key
+    mutation.__type__ = new_type
   }
 
   let onNewAction = function ({module_key, action, newKey, origKey}) {
@@ -79,6 +80,7 @@ export const connectFlux = function (options) {
      * @type {Object}
      */
     actions = {},
+    mutations = {},
     // TODO check if component is React Component
     propsToState = defaultPropsToState,
     store: $store, // store is just the combined reducers in react-redux
@@ -110,6 +112,7 @@ export const connectFlux = function (options) {
 
     // TODO: override the default store's state from <Provider>
     for (let getter_key in getters) {
+      console.info('getters[getter_key]', getters, getters[getter_key])
       if (typeof getters[getter_key] === 'function') {
         if (!getters[getter_key].hasOwnProperty('__module_key__')) {
           console.warn(`key '__module_key__' not found in getter ${getter_key}, the 1st argument of it would be undefined.`)
@@ -145,13 +148,13 @@ export const connectFlux = function (options) {
   }
 
   let ofFlux_mergeDispatchToProps = (dispatch, ownProps) => {
-    let convertedActions = {}
+    let convertedPropsFromActions = {}
 
     for (let action_key in actions) {
       let actionFnType = typeof actions[action_key]
       if (actionFnType === 'function') {
         // convert dispatch to vuex-style actions
-        convertedActions[action_key] = (...args) => {
+        convertedPropsFromActions[action_key] = (...args) => {
           /**
            * reduxActionReturnValue may be Promise
            *
@@ -182,10 +185,29 @@ export const connectFlux = function (options) {
         console.warn(`invalid action ${action_key}, one ${actionFnType}type-actiontype given`)
       }
     }
+    let convertedPropsFromMutations = {}
+    for (let mutation_key in mutations) {
+      let mutationFnType = typeof mutations[mutation_key]
+      if (mutationFnType === 'function') {
+        // convert dispatch to vuex-style mutations
+        convertedPropsFromMutations[mutation_key] = (payload) => {
+          /**
+           * reduxMutationReturnValue may be Promise
+           *
+           */
+          let rootState = {...$store.getState()}, { __module_key__, __type__: type } = mutations[mutation_key]
+
+          $store.commit(type, payload)
+        }
+      } else {
+        console.warn(`invalid mutation ${mutation_key}, one ${mutationFnType}type-mutationtype given`)
+      }
+    }
 
     return {
       ...typeof mergeDispatchToProps === 'function' ? mergeDispatchToProps(dispatch, ownProps) : {},
-      ...convertedActions,
+      ...convertedPropsFromActions,
+      ...convertedPropsFromMutations,
       $dispatch: dispatch, // always return dispatch
       $store, // pass $store just like vuex
     }
