@@ -164,17 +164,17 @@ export const connectFlux = function (options) {
             scopedCtx.ownProps = ownProps
           }
           let reduxActionReturnValue = actions[action_key](scopedCtx, ...args)
-          if (!(reduxActionReturnValue instanceof Promise)) {
-            // TODO: check whether the type in all types in system
-            if (typeof reduxActionReturnValue === 'object') {
-              if (!reduxActionReturnValue.hasOwnProperty('type')) {
-                console.warn(`bad return from ${action_key} method, you should return one object with its own property 'type' corresponding the same-name one in action-types of your redux`)
-                process.env.NODE_ENV !== 'production' && console.info(reduxActionReturnValue)
-              } else {
-                dispatch(reduxActionReturnValue)
-              }
-            }
-          }
+          // if (!(reduxActionReturnValue instanceof Promise)) {
+          //   // TODO: check whether the type in all types in system
+          //   if (typeof reduxActionReturnValue === 'object') {
+          //     if (!reduxActionReturnValue.hasOwnProperty('type')) {
+          //       console.warn(`bad return from ${action_key} method, you should return one object with its own property 'type' corresponding the same-name one in action-types of your redux`)
+          //       process.env.NODE_ENV !== 'production' && console.info(reduxActionReturnValue)
+          //     } else {
+          //       dispatch(reduxActionReturnValue)
+          //     }
+          //   }
+          // }
 
           return reduxActionReturnValue
         }
