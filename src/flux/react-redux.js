@@ -114,7 +114,6 @@ export const connectFlux = function (options) {
 
     // TODO: override the default store's state from <Provider>
     for (let getter_key in getters) {
-      console.info('getters[getter_key]', getters, getters[getter_key])
       if (typeof getters[getter_key] === 'function') {
         if (!getters[getter_key].hasOwnProperty('__module_key__')) {
           console.warn(`key '__module_key__' not found in getter ${getter_key}, the 1st argument of it would be undefined.`)
