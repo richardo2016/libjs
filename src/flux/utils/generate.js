@@ -1,8 +1,11 @@
 import * as fluxModules from '../module'
 
+const defaultFilterNs = (ns) => ns.replace(/\/index$/, '')
+
 export function genFluxModulesFromFcHash (FcHash = {}, options) {
   let modules = {},
       {
+        filterNamespace = defaultFilterNs,
         prefix: module_prefix = '',
         suffix: module_suffix = '',
         filter = null
@@ -11,9 +14,7 @@ export function genFluxModulesFromFcHash (FcHash = {}, options) {
   let canfilter = typeof filter === 'function'
 
   for (let key of Object.keys(FcHash)) {
-    let { namespace, module_key } = fluxModules.relPathToNsAndModuleKey(key, {
-      filterNamespace: (ns) => ns.replace(/\/index$/, '')
-    })
+    let { namespace, module_key } = fluxModules.relPathToNsAndModuleKey(key, { filterNamespace })
 
     if (modules.hasOwnProperty(module_key)) {
       console.warn(`module ${module_key} has exist in the modules, check your input FcHash object and remove the equivant vuex2-style module file.`)
@@ -31,6 +32,7 @@ export function genFluxModulesFromFcHash (FcHash = {}, options) {
 export function genFluxModulesFromWebpackCtx (webpackRequireContext = {}, options) {
   let modules = {},
       {
+        filterNamespace = defaultFilterNs,
         prefix: module_prefix = '',
         suffix: module_suffix = ''
       } = options || {}
@@ -40,9 +42,7 @@ export function genFluxModulesFromWebpackCtx (webpackRequireContext = {}, option
       return
     }
 
-    let { namespace, module_key } = fluxModules.relPathToNsAndModuleKey(key, {
-      filterNamespace: (ns) => ns.replace(/\/index$/, '')
-    })
+    let { namespace, module_key } = fluxModules.relPathToNsAndModuleKey(key, { filterNamespace })
 
     if (modules.hasOwnProperty(module_key)) {
       console.warn(`module ${module_key} has exist in the modules, check your input webpackRequireContext object and remove the equivant vuex2-style module file.`)
