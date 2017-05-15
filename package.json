@@ -1,6 +1,6 @@
 {
   "name": "@richardo2016/js",
-  "version": "0.0.1-alpha-f2dcd6c0",
+  "version": "0.0.2-alpha",
   "description": "",
   "scripts": {
     "test": "test"
@@ -16,6 +16,8 @@
   "author": "Chen Lei <richardo2016@gmail.com>",
   "license": "MIT",
   "devDependencies": {
+  },
+  "dependencies": {
     "fetch-ie8": "^1.5.0",
     "moment": "^2.18.1"
   }
