@@ -1,52 +1,8 @@
-import * as fluxModules from './flux-modules'
+import * as fluxModules from './module'
 import Vuex from 'vuex' // vuex2
+import { genFluxModules } from './utils/generate'
 
-/**
- * vuex2-style module generator
- *
- */
-export function genVuexModules (webpackRequireContext = {}, options) {
-  let modules = {},
-      {
-        prefix: module_prefix = '',
-        suffix: module_suffix = ''
-      } = options || {}
-
-  webpackRequireContext.keys().forEach((key) => {
-    if (key === './index.js') {
-      return
-    }
-
-    let { namespace, module_key } = fluxModules.relPathToNsAndModuleKey(key, {
-      filterNamespace: (ns) => ns.replace(/\/index$/, '')
-    })
-
-    if (modules.hasOwnProperty(module_key)) {
-      console.warn(`module ${module_key} has exist in the modules, check your input webpackRequireContext object and remove the equivant vuex2-style module file.`)
-      return
-    }
-
-    // TODO: 重复键名检测
-    let exportContent = {...webpackRequireContext(key)}
-
-    module_key = fluxModules.prefixer({module_name: module_key, module_prefix})
-    module_key = fluxModules.suffixer({module_name: module_key, module_suffix})
-
-    fluxModules.fixMObject(exportContent.M, {
-      module_key,
-      namespace,
-      MGetter: () => exportContent
-    })
-
-    // correspond to the mutations
-    fluxModules.normalizeTypesAndMutationsOfExportContent({exportContent})
-    fluxModules.normalizeGettersAndActionsOfExportContent({exportContent})
-
-    modules[module_key] = exportContent.default = exportContent
-  })
-
-  return modules
-}
+export const genVuexModules = genFluxModules
 
 // never change module in this definition
 export function getModuleStateFromStore ({module = {}, runtimeStore = {}}) {

@@ -1,12 +1,27 @@
 export function importDirectories (webpackRequireContext = {}, options) {
   let direcotry = {}
-  let { matchReg = /\.\/(.*)\.js$/, fileNameFilter } = options || {}
+  let { matchReg = /\.\/(.*)\.js$/, excludeFilePatterns = [], fileNameFilter } = options || {}
 
-  webpackRequireContext.keys().map(fileKey => {
+  webpackRequireContext.keys().forEach(fileKey => {
     let [_, fileName] = fileKey.match(matchReg)
     if (!fileName) {
       console.warn(`no fileName matched by regex ${matchReg} for '${fileKey}'`)
       return
+    }
+
+    for (let pattern of excludeFilePatterns) {
+      switch (typeof pattern) {
+        case 'string':
+          if (fileName === pattern) {
+            return
+          }
+          break
+        case 'object':
+          if (pattern instanceof RegExp && pattern.test(fileName)) {
+            return
+          }
+          break
+      }
     }
 
     if (typeof fileNameFilter === 'function') {

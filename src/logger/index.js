@@ -6,39 +6,39 @@
 let {DEBUG = true} = global || window || {}
 
 export class Logger {
-  constructor(level) {
+  constructor (level) {
     if (level === undefined) {
-      level = DEBUG ? 'debug' : 'info';
+      level = DEBUG ? 'debug' : 'info'
     }
-    this.level = level;
+    this.level = level
   }
 
-  debug(...args) {
+  debug (...args) {
     if (this.level === 'debug') {
-      console.debug(this.time(), ...args);
+      console.debug(this.time(), ...args)
     }
   }
 
-  info(...args) {
+  info (...args) {
     if (this.level === 'debug' || this.level === 'info') {
-      console.info(this.time(), ...args);
+      console.info(this.time(), ...args)
     }
   }
 
-  warn(...args) {
+  warn (...args) {
     if (this.level === 'debug' || this.level === 'info' || this.level === 'warn') {
-      console.warn(this.time(), ...args);
+      console.warn(this.time(), ...args)
     }
   }
 
-  error(...args) {
-    console.error(this.time(), ...args);
+  error (...args) {
+    console.error(this.time(), ...args)
   }
 
-  time() {
-    let d = new Date();
-    return d.toTimeString().substring(0, 8) + '.' + d.getMilliseconds();
+  time () {
+    let d = new Date()
+    return d.toTimeString().substring(0, 8) + '.' + d.getMilliseconds()
   }
-};
+}
 
-export default new Logger();
+export default new Logger()
