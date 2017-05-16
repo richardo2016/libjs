@@ -144,6 +144,8 @@ export function bindVmToGetterHash (getterHash, vm, options) {
 }
 
 /**
+ * depreacted, never use.
+ *
  * Bind the vm with `$store` for the getters genareted by `Vuex.mapActions` in raw environment
  *
  * @return {[type]} [description]
@@ -165,6 +167,7 @@ export function bindVmToGetter (getterFn, vm) {
 }
 
 /**
+ *
  * Bind the vm with `$store` for the actions genareted by `Vuex.mapActions` in raw environment
  *
  * @return {[type]} [description]
@@ -178,6 +181,8 @@ export function bindVmToActionHash (actionHash, vm) {
 }
 
 /**
+ * depreacted, never use.
+ *
  * Bind the vm with `$store` for the actions genareted by `Vuex.mapActions` in raw environment
  *
  * @return {[type]} [description]
@@ -254,7 +259,15 @@ export function enhanceVuexModules (module, {$store, vm = {$store}}) {
   return module
 }
 
-// never change module in this definition
+/**
+ * depreacted, never use.
+ *
+ * never change module in this definition.
+ *
+ * @param  {Object} options.module [description]
+ * @param  {Object} runtimeStore   [description]
+ * @return {[type]}                [description]
+ */
 export function getModuleStateFromStore ({module = {}, runtimeStore = {}}) {
   if (!module.hasOwnProperty('M')) {
     console.warn(`no 'M' in module`)
