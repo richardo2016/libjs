@@ -32,6 +32,8 @@ export function genFluxModulesWithReducer (fcHash, options) {
     }
 
     let { namespace, module_key } = fluxModules.relPathToNsAndModuleKey(filepath, {
+      module_prefix,
+      module_suffix,
       filterNamespace: (ns) => ns.replace(/\/index$/, '')
     })
 
@@ -42,9 +44,6 @@ export function genFluxModulesWithReducer (fcHash, options) {
 
     // TODO: 重复键名检测
     let exportContent = {...fcHash[filepath]}
-
-    module_key = fluxModules.prefixer({module_name: module_key, module_prefix})
-    module_key = fluxModules.suffixer({module_name: module_key, module_suffix})
 
     fluxModules.fixMObject(exportContent.M, {
       module_key,

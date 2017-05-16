@@ -2,19 +2,23 @@ import * as fluxModules from '../module'
 
 const defaultFilterNs = (ns) => ns.replace(/\/index$/, '')
 
-export function genFluxModulesFromFcHash (FcHash = {}, options) {
-  let modules = {},
-      {
+const defaultEmpty = () => {}
+
+function genFluxModulesFromFcHash (FcHash = {}, options) {
+  let {
+        modules = {},
         filterNamespace = defaultFilterNs,
+        onModuleGenerated = defaultEmpty,
         prefix: module_prefix = '',
         suffix: module_suffix = '',
-        filter = null
+        filter = null,
+        ...cfgs
       } = options || {}
 
   let canfilter = typeof filter === 'function'
 
   for (let key of Object.keys(FcHash)) {
-    let { namespace, module_key } = fluxModules.relPathToNsAndModuleKey(key, { filterNamespace })
+    let { namespace, module_key } = fluxModules.relPathToNsAndModuleKey(key, { module_prefix, module_suffix, filterNamespace })
 
     if (modules.hasOwnProperty(module_key)) {
       console.warn(`module ${module_key} has exist in the modules, check your input FcHash object and remove the equivant vuex2-style module file.`)
@@ -23,18 +27,23 @@ export function genFluxModulesFromFcHash (FcHash = {}, options) {
 
     let exportContent = {...FcHash[key]}
 
-    bindFluxModule(exportContent, modules, {module_key, module_prefix, module_suffix, namespace})
+    cfgs.module_key = module_key
+    cfgs.namespace = namespace
+    bindFluxModule(exportContent, modules, cfgs)
+    modules[module_key] && onModuleGenerated(modules[module_key], {exportContent, modules, module_key, namespace})
   }
 
   return modules
 }
 
-export function genFluxModulesFromWebpackCtx (webpackRequireContext = {}, options) {
-  let modules = {},
-      {
+function genFluxModulesFromWebpackCtx (webpackRequireContext = {}, options) {
+  let {
+        modules = {},
         filterNamespace = defaultFilterNs,
+        onModuleGenerated = defaultEmpty,
         prefix: module_prefix = '',
-        suffix: module_suffix = ''
+        suffix: module_suffix = '',
+        ...cfgs
       } = options || {}
 
   for (let key of webpackRequireContext.keys()) {
@@ -42,7 +51,7 @@ export function genFluxModulesFromWebpackCtx (webpackRequireContext = {}, option
       return
     }
 
-    let { namespace, module_key } = fluxModules.relPathToNsAndModuleKey(key, { filterNamespace })
+    let { namespace, module_key } = fluxModules.relPathToNsAndModuleKey(key, { module_prefix, module_suffix, filterNamespace })
 
     if (modules.hasOwnProperty(module_key)) {
       console.warn(`module ${module_key} has exist in the modules, check your input webpackRequireContext object and remove the equivant vuex2-style module file.`)
@@ -51,7 +60,10 @@ export function genFluxModulesFromWebpackCtx (webpackRequireContext = {}, option
 
     let exportContent = {...webpackRequireContext(key)}
 
-    bindFluxModule(exportContent, modules, {module_key, module_prefix, module_suffix, namespace})
+    cfgs.module_key = module_key
+    cfgs.namespace = namespace
+    bindFluxModule(exportContent, modules, cfgs)
+    modules[module_key] && onModuleGenerated(modules[module_key], {exportContent, modules, module_key, namespace})
   }
 
   return modules
@@ -71,24 +83,20 @@ export function genFluxModules (entry, ...rest) {
   }
 }
 
-export function bindFluxModule (exportContent, modules, cfgs) {
-  let {module_key = '', module_prefix = '', module_suffix = '', namespace = ''} = cfgs || {}
-  module_key = fluxModules.prefixer({module_name: module_key, module_prefix})
-  module_key = fluxModules.suffixer({module_name: module_key, module_suffix})
-
+function bindFluxModule (exportContent, modules, cfgs) {
+  let { module_key, namespace, onNewMutation, onNewGetter, onNewAction } = cfgs || {}
   fluxModules.fixMObject(exportContent.M, {
     module_key,
     namespace,
-    MGetter: () => exportContent
+    MGetter: () => modules[module_key]
   })
-
   // correspond to the mutations
-  fluxModules.normalizeTypesAndMutationsOfExportContent({exportContent})
-  fluxModules.normalizeGettersAndActionsOfExportContent({exportContent})
+  fluxModules.normalizeTypesAndMutationsOfExportContent({exportContent, onNewMutation})
+  fluxModules.normalizeGettersAndActionsOfExportContent({exportContent, onNewGetter, onNewAction})
 
   modules[module_key] = exportContent.default = exportContent
   modules[module_key].toString = modules[module_key].valueOf = () => exportContent.M.PREFIX
   modules[module_key].M.toString = modules[module_key].M.valueOf = () => module_key
 
-  modules[module_key] = exportContent.default = exportContent
+  return { module_key, namespace, module: modules[module_key] }
 }

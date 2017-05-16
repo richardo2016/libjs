@@ -76,7 +76,7 @@ export const prefixTypes = (options) => {
  * @return {[type]}             [description]
  */
 export function relPathToNsAndModuleKey (relFilePath, options) {
-  let { filter, filterNamespace, filterModuleKey } = options || {}
+  let { filter, filterNamespace, filterModuleKey, module_prefix = '', module_suffix = '' } = options || {}
 
   let namespace = relFilePath
 
@@ -97,6 +97,15 @@ export function relPathToNsAndModuleKey (relFilePath, options) {
 
   if (typeof filterModuleKey === 'function') {
     module_key = filterModuleKey(module_key)
+  }
+
+  if (module_prefix) {
+    module_key = prefixer({module_name: module_key, module_prefix})
+    namespace = prefixer({module_name: namespace, module_prefix})
+  }
+  if (module_suffix) {
+    module_key = suffixer({module_name: module_key, module_suffix})
+    namespace = suffixer({module_name: namespace, module_suffix})
   }
 
   let module_descriptor = { module_key, namespace }
@@ -154,8 +163,7 @@ by being assigned 'types' to its 'M' object.\
       onGenNewkey: !exportContent.mutations ? () => {} : ({type_key, old_type, new_type}) => {
         if (exportContent.mutations.hasOwnProperty(old_type)) {
           mutations[new_type] = exportContent.mutations[old_type]
-          callback && onNewMutation({exportContent, module_key: exportContent.M.GETTER_KEY, mutation: mutations[new_type], new_type, old_type})
-          noHashAddon(mutations[new_type], {origKey: old_type, newKey: new_type, addon_type: 'mutation'})
+          callback && onNewMutation({rawModule: exportContent, exportContent, module_key: exportContent.M.GETTER_KEY, mutation: mutations[new_type], new_type, old_type, newKey: new_type, origKey: old_type})
         }
       }
     })
@@ -186,8 +194,7 @@ export function normalizeGettersAndActionsOfExportContent ({exportContent, onNew
     Object.keys(exportContent.getters).forEach((origKey) => {
       let newKey = `${exportContent.M.MODULE_PREIX}${origKey}`
       getters[newKey] = exportContent.getters[origKey]
-      callback && onNewGetter({exportContent, module_key: exportContent.M.GETTER_KEY, getter: getters[newKey], newKey, origKey})
-      // noHashAddon(getters[newKey], {origKey, newKey, addon_type: 'getter'})
+      callback && onNewGetter({rawModule: exportContent, exportContent, module_key: exportContent.M.GETTER_KEY, getter: getters[newKey], newKey, origKey})
     })
     exportContent.getters = getters
   }
@@ -198,8 +205,7 @@ export function normalizeGettersAndActionsOfExportContent ({exportContent, onNew
     Object.keys(exportContent.actions).forEach((origKey) => {
       let newKey = `${exportContent.M.MODULE_PREIX}${origKey}`
       actions[newKey] = exportContent.actions[origKey]
-      callback && onNewAction({exportContent, module_key: exportContent.M.GETTER_KEY, action: actions[newKey], newKey, origKey})
-      // noHashAddon(actions[newKey], {origKey, newKey, addon_type: 'action'})
+      callback && onNewAction({rawModule: exportContent, exportContent, module_key: exportContent.M.GETTER_KEY, action: actions[newKey], newKey, origKey})
     })
     exportContent.actions = actions
   }
