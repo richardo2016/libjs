@@ -8,6 +8,7 @@ function genFluxModulesFromFcHash (FcHash = {}, options) {
   let {
         modules = {},
         filterNamespace = defaultFilterNs,
+        onModuleGenerate = defaultEmpty,
         onModuleGenerated = defaultEmpty,
         prefix: module_prefix = '',
         suffix: module_suffix = '',
@@ -29,6 +30,7 @@ function genFluxModulesFromFcHash (FcHash = {}, options) {
 
     cfgs.module_key = module_key
     cfgs.namespace = namespace
+    onModuleGenerate({rawModule: exportContent, module_key, namespace})
     bindFluxModule(exportContent, modules, cfgs)
     modules[module_key] && onModuleGenerated(modules[module_key], {exportContent, modules, module_key, namespace})
   }
@@ -40,6 +42,7 @@ function genFluxModulesFromWebpackCtx (webpackRequireContext = {}, options) {
   let {
         modules = {},
         filterNamespace = defaultFilterNs,
+        onModuleGenerate = defaultEmpty,
         onModuleGenerated = defaultEmpty,
         prefix: module_prefix = '',
         suffix: module_suffix = '',
@@ -62,6 +65,7 @@ function genFluxModulesFromWebpackCtx (webpackRequireContext = {}, options) {
 
     cfgs.module_key = module_key
     cfgs.namespace = namespace
+    onModuleGenerate({rawModule: exportContent, module_key, namespace})
     bindFluxModule(exportContent, modules, cfgs)
     modules[module_key] && onModuleGenerated(modules[module_key], {exportContent, modules, module_key, namespace})
   }
