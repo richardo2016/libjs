@@ -25,6 +25,30 @@ export const registerVuexModules = (entry, options = {}) => {
   return genFluxModules(entry, rest)
 }
 
+export const injectVuexModules = (entry, options) => {
+  let { storeWatcher = [], ...rest } = options || {}
+
+  rest.onNewAction = exposeModuleUtils.callbackNewActionForExpose
+  rest.onNewGetter = exposeModuleUtils.callbackNewGetterForExpose
+
+  rest.onModuleGenerate = (payload) => {
+    let { rawModule } = payload
+    rawModule.$expose = {}
+    rawModule.M.vuex = Vuex
+    rawModule.M.vuexNormalizeMap = {getters: {}, actions: {}}
+  }
+
+  rest.onModuleGenerated = (module, payload) => {
+    storeWatcher.push(store => {
+      exposeModuleUtils(module, {$store: store})
+      delete module.M.vuexNormalizeMap
+      return storeWatcher
+    })
+  }
+
+  return genFluxModules(entry, rest)
+}
+
 /**
  * another callee for enhanceVuexModules
  *
