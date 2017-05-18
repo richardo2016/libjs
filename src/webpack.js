@@ -1,9 +1,17 @@
 export function importDirectories (webpackRequireContext = {}, options) {
   let direcotry = {}
-  let { matchReg = /\.\/(.*)\.js$/, excludeFilePatterns = [], fileNameFilter } = options || {}
+  let {
+    matchReg = /\.\/(.*)\.(j|t)s$/,
+    excludeFilePatterns = [],
+    keepWebpackContext = false,
+    assign = true,
+    fileNameFilter,
+    filterModule
+  } = options || {}
 
+  let callback = typeof filterModule === 'function'
   webpackRequireContext.keys().forEach(fileKey => {
-    let [_, fileName] = fileKey.match(matchReg)
+    let [_, fileName] = fileKey.match(matchReg) || []
     if (!fileName) {
       console.warn(`no fileName matched by regex ${matchReg} for '${fileKey}'`)
       return
@@ -28,7 +36,13 @@ export function importDirectories (webpackRequireContext = {}, options) {
       fileName = fileNameFilter(fileName)
     }
 
-    direcotry[fileName] = webpackRequireContext(fileKey)
+    direcotry[fileName] = !keepWebpackContext ? {...webpackRequireContext(fileKey)} : webpackRequireContext(fileKey)
+    if (callback) {
+      let newModule = filterModule({module: direcotry[fileName]})
+      if (assign && newModule) {
+        direcotry[fileName] = newModule
+      }
+    }
   })
 
   return direcotry

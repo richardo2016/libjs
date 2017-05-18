@@ -13,3 +13,11 @@ export function mixinListIterator (options) {
   list[Symbol.iterator] = generator
   return list
 }
+
+export function iteratorable (object) {
+  if (object === null || typeof object !== 'object') {
+    return false
+  }
+
+  return Object.getOwnPropertySymbols(object).indexOf(Symbol.iterator) > -1
+}
