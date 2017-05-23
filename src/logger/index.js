@@ -1,8 +1,3 @@
-/**
- * NC金融
- * investsavior.com
- */
-
 let {DEBUG = true} = global || window || {}
 
 export class Logger {
