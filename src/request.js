@@ -22,29 +22,28 @@ export const fixUrlStart = (url = '', options) => {
 }
 
 export const computeUrl = (_url = '', options) => {
-  let { host = '', protocol = window.location.protocol, url = _url, url_addition = '' } = options || {},
-      needCors = false
+  let { host = R.apiBase || '', protocol = window.location.protocol, url = _url, url_addition = '' } = options || {}
   // TODO: compute the possible host in url
   if (host && host !== window.location.host) {
     if (url.indexOf(host) > -1) {
       url = fixUrlStart(url.replace(new RegExp(`(${host})|(${protocol}(//)?)`, 'ig'), ''))
     }
     url = `${protocol}//${host}${url}`
-    needCors = true
   }
 
   if (typeof options === 'object' && options.hasOwnProperty('cors')) {
-    needCors = options.cors
   }
 
   if (url_addition) {
     url += url_addition
   }
 
-  return {url, needCors}
+  return {url}
 }
 
 export const R = {}
+
+R.apiBase = ''
 
 R.checkResponse = (response) => {
   if (!response.ok) {
@@ -72,7 +71,7 @@ R.requestJson = (url = '', payload = {}, options = {}) => {
 
   let { queryParamsObj = {}, method = 'POST' } = options,
       queryParams = normalizeParams(queryParamsObj),
-      { url: _url, needCors } = computeUrl(url, options.computeOpts),
+      { url: _url } = computeUrl(url, options.computeOpts),
       { checkResponse = R.checkResponse } = options
 
   return fetch(`${_url}${queryParams ? '?' + queryParams : ''}`, {
@@ -84,8 +83,7 @@ R.requestJson = (url = '', payload = {}, options = {}) => {
       'Content-Type': 'application/json'
     },
     // 考察 IE 8 下是否有编码问题
-    body: JSON.stringify(payload),
-    ...needCors
+    body: JSON.stringify(payload)
   })
   .then(checkResponse)
   .then(R.normalizeRes)
@@ -95,7 +93,7 @@ R.requestJson = (url = '', payload = {}, options = {}) => {
 R.get = (url = '', payload = {}, options = {}) => {
   R.onbefore({url, payload, options})
 
-  let { url: _url, needCors } = computeUrl(url, options.computeOpts),
+  let { url: _url } = computeUrl(url, options.computeOpts),
       { checkResponse = R.checkResponse } = options
 
   return fetch(_url + '?' + normalizeParams(payload), {
@@ -104,8 +102,7 @@ R.get = (url = '', payload = {}, options = {}) => {
     ...options.fetchOptions,
     headers: {
       ...options.headers
-    },
-    ...needCors
+    }
   })
   .then(checkResponse)
   .then(R.normalizeRes)
@@ -115,7 +112,7 @@ R.get = (url = '', payload = {}, options = {}) => {
 R.post = (url = '', payload = {}, options = {}) => {
   R.onbefore({url, payload, options})
 
-  let { url: _url, needCors } = computeUrl(url, options.computeOpts),
+  let { url: _url } = computeUrl(url, options.computeOpts),
       { checkResponse = R.checkResponse } = options
 
   return fetch(_url, {
@@ -127,7 +124,6 @@ R.post = (url = '', payload = {}, options = {}) => {
       'Content-Type': 'application/x-www-form-urlencoded'
     },
     // 考察 IE 8 下是否有编码问题
-    ...needCors,
     body: normalizeParams(payload)
   })
   .then(checkResponse)
@@ -140,7 +136,7 @@ R.postJson = (url = '', payload = {}, options = {}) => {
 
   let { queryParamsObj = {} } = options,
       queryParams = normalizeParams(queryParamsObj),
-      { url: _url, needCors } = computeUrl(url, options.computeOpts),
+      { url: _url } = computeUrl(url, options.computeOpts),
       { checkResponse = R.checkResponse } = options
 
   return fetch(`${_url}${queryParams ? '?' + queryParams : ''}`, {
@@ -152,8 +148,7 @@ R.postJson = (url = '', payload = {}, options = {}) => {
       'Content-Type': 'application/json'
     },
     // 考察 IE 8 下是否有编码问题
-    body: JSON.stringify(payload),
-    ...needCors
+    body: JSON.stringify(payload)
   })
   .then(checkResponse)
   .then(R.normalizeRes)
@@ -163,7 +158,7 @@ R.postJson = (url = '', payload = {}, options = {}) => {
 R.postFile = async (url = '', payload = {}, options = {}) => {
   // TODO: compact IE 8
   let { file } = payload,
-      { url: _url, needCors } = computeUrl(url, options.computeOpts),
+      { url: _url } = computeUrl(url, options.computeOpts),
       { checkResponse = R.checkResponse } = options
 
   if (!file) return error('no valid file Given')
@@ -195,7 +190,7 @@ R.postFile = async (url = '', payload = {}, options = {}) => {
 R.delete = (url = '', payload = {}, options = {}) => {
   R.onbefore({url, payload, options})
 
-  let { url: _url, needCors } = computeUrl(url, options.computeOpts),
+  let { url: _url } = computeUrl(url, options.computeOpts),
       { checkResponse = R.checkResponse } = options
 
   return fetch(_url, {
@@ -207,7 +202,6 @@ R.delete = (url = '', payload = {}, options = {}) => {
       // 'Content-Type': 'application/x-www-form-urlencoded'
     },
     // 考察 IE 8 下是否有编码问题
-    ...needCors,
     body: normalizeParams(payload)
   })
   .then(checkResponse)

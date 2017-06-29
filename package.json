@@ -15,8 +15,7 @@
   },
   "author": "Chen Lei <richardo2016@gmail.com>",
   "license": "MIT",
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "dependencies": {
     "fetch-ie8": "^1.5.0",
     "moment": "^2.18.1"
