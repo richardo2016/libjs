@@ -4,12 +4,11 @@ export function importDirectories (webpackRequireContext = {}, options) {
     matchReg = /\.\/(.*)\.(j|t)s$/,
     excludeFilePatterns = [],
     keepWebpackContext = false,
-    assign = true,
     fileNameFilter,
     filterModule
   } = options || {}
 
-  let callback = typeof filterModule === 'function'
+  let callbackNewModule = typeof filterModule === 'function'
   webpackRequireContext.keys().forEach(fileKey => {
     let [_, fileName] = fileKey.match(matchReg) || []
     if (!fileName) {
@@ -32,15 +31,16 @@ export function importDirectories (webpackRequireContext = {}, options) {
       }
     }
 
+    let origName, newName = origName = fileName
     if (typeof fileNameFilter === 'function') {
-      fileName = fileNameFilter(fileName)
+      newName = fileNameFilter(origName)
     }
 
-    direcotry[fileName] = !keepWebpackContext ? {...webpackRequireContext(fileKey)} : webpackRequireContext(fileKey)
-    if (callback) {
-      let newModule = filterModule({module: direcotry[fileName]})
-      if (assign && newModule) {
-        direcotry[fileName] = newModule
+    direcotry[newName] = !keepWebpackContext ? {...webpackRequireContext(fileKey)} : webpackRequireContext(fileKey)
+    if (callbackNewModule) {
+      let newModule = filterModule({newName, origName, module: direcotry[newName]})
+      if (newModule) {
+        direcotry[newName] = newModule
       }
     }
   })
