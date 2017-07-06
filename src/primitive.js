@@ -6,7 +6,7 @@ export const primitives = {
   object: 'object'
 }
 
-export function force ({value, type, ...params}) {
+export function coerce ({value, type, ...params}) {
   if (!primitives.hasOwnProperty(type)) {
     console.warn(`invalid primitive type given: ${type}`)
     return
@@ -31,10 +31,10 @@ export function force ({value, type, ...params}) {
   }
 }
 
-export function forceNumber (value) {
-  return force({value, type: primitives.number})
+export function coerceNumber (value) {
+  return coerce({value, type: primitives.number})
 }
 
-export function forceString (value) {
-  return force({value, type: primitives.string})
+export function coerceString (value) {
+  return coerce({value, type: primitives.string})
 }

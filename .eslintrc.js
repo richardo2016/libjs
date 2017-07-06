@@ -6,9 +6,23 @@ module.exports = {
   parserOptions: {
     sourceType: 'module'
   },
+
+  "globals": {
+    // "document": false,
+    // "escape": false,
+    // "navigator": false,
+    // "unescape": false,
+    // "window": false,
+    "describe": true,
+    "before": true,
+    "it": true,
+    "expect": true,
+    "sinon": true
+  },
   // https://github.com/feross/standard/blob/master/RULES.md#javascript-standard-style
   extends: 'standard',
   // required to lint *.vue files
+
   plugins: [
     'html'
   ],
