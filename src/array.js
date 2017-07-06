@@ -1,4 +1,4 @@
-export let divideIntoGroup = (arr = [], options = {}) => {
+export function divideIntoGroup (arr = [], options = {}) {
   let { rowCount = 2, fixLast = false, fixUnit = undefined } = options || {},
       newArr = [], group = []
 
@@ -15,7 +15,7 @@ export let divideIntoGroup = (arr = [], options = {}) => {
   if (fixLast) {
     let lastArr = newArr[newArr.length - 1]
     if (lastArr && lastArr.length < rowCount) {
-      while(lastArr.length < rowCount) {
+      while (lastArr.length < rowCount) {
         lastArr.push(fixUnit)
       }
       // lastArr.length = rowCount

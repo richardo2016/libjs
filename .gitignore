@@ -49,16 +49,6 @@ obj/
 [Rr]elease*/
 _ReSharper*/
 [Tt]est[Rr]esult*
-dist/*
+# dist/*
 conf.d/*
 .gitmodules
-
-# webpack
-app-container/*
-app-containers/*
-
-# yaml config file but config-template-file
-.wps.yaml
-.wm.yaml
-
-wm_modules
