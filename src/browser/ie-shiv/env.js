@@ -4,12 +4,12 @@ if (typeof window === 'undefined') {
   window = {}
 }
 
-export let {userAgent: UA} = window.navigator || {}
+export const {userAgent: UA} = window.navigator || {}
 
-export let isWin = UA.toLowerCase().indexOf('windows') > -1
-export let isIE = /*@cc_on!@*/false || UA.indexOf('MSIE') > -1
+export const isWin = UA.toLowerCase().indexOf('windows') > -1
+export const isIE = /*@cc_on!@*/false || UA.indexOf('MSIE') > -1
 // http://stackoverflow.com/questions/31757852/how-can-i-detect-internet-explorer-ie-and-microsoft-edge-using-javascript
-export let checkIEVersion = () => {
+export function checkIEVersion = {
   var rv = -1 // Return value assumes failure.
 
   if (navigator.appName == 'Microsoft Internet Explorer'){

@@ -1,8 +1,4 @@
-export let filterEmptyParam = (obj) => {
-
-}
-
-export let warnParam = (param, options) => {
+export function warnParam (param, options) {
   if (typeof options === 'string') {
     options = {type: options}
   }
@@ -45,11 +41,7 @@ export let warnFieldEmpty = (obj, field_name, options) => {
   return true
 }
 
-export let checkType = () => {
-
-}
-
-export const jsonToParams = (jsonObj) => {
+export function jsonToParams (jsonObj) {
   let query_params = []
 
   for (let k in jsonObj) {
@@ -137,16 +129,4 @@ export const computeParamsByOpt = (params, params_filter) => {
   }
 
   return params
-}
-
-export const getQuries = () => {
-  let { search } = window.location
-  if (search.indexOf('?') === 0) search = search.slice(1)
-
-  let query = {}, arr = search.split('&'), arrLen = arr.length
-  for (let i = 0; i < arrLen; i++) {
-    let [key, value] = arr[i].split('=')
-    query[key] = value
-  }
-  return query
 }

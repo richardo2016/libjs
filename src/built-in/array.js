@@ -1,4 +1,4 @@
-export function divideIntoGroup (arr = [], options = {}) {
+export function group (arr = [], options = {}) {
   let { rowCount = 2, fixLast = false, fixUnit = undefined } = options || {},
       newArr = [], group = []
 
