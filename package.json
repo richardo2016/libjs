@@ -1,9 +1,9 @@
 {
   "name": "@richardo2016/js",
-  "version": "0.0.3",
+  "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "webpack --env build",
+    "build": "rimraf dist/*.min.js && webpack --env build",
     "dev": "webpack --progress --colors --watch --env dev",
     "test": "NODE_ENV=test mocha --compilers js:babel-core/register --colors ./test/*.spec.js",
     "test:watch": "NODE_ENV=test mocha --compilers js:babel-core/register --colors -w ./test/*.spec.js"
@@ -12,7 +12,7 @@
     "richardo2016",
     "js"
   ],
-  "main": "dist/rayjs.js",
+  "main": "dist/ray.js",
   "repository": {
     "type": "git",
     "url": "git@github.com:richardo2016/libjs.git"
