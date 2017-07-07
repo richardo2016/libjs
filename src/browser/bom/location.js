@@ -1,5 +1,5 @@
-export const getQuries = (queryString) => {
-  if (!queryString) {
+export function getQuries = (queryString) {
+  if (!queryString && typeof window !== 'undefined') {
     let { search } = window.location
     if (search.indexOf('?') === 0) {
       queryString = search.slice(1)

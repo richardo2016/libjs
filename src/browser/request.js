@@ -10,8 +10,8 @@ if (!window.fetch) {
 let { fetch } = window
 
 import { error, isResponse } from './response' // eslint-disable
-import { jsonToParams as normalizeParams } from './params' // eslint-disable
-import { secretObj, SetObjPropertyQuietly } from './object' // eslint-disable
+import { jsonToParams as normalizeParams } from '../params' // eslint-disable
+import { secretObj, SetObjPropertyQuietly } from '../object/object' // eslint-disable
 
 export const fixUrlStart = (url = '', options) => {
   if (url.substr(0, 1) !== '/' && !/^https?:\/\//.test(url)) {

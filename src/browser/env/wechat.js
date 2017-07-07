@@ -1,11 +1,11 @@
-export let UAString = 'MicroMessenger'.toLowerCase()
-export let ua = window.navigator.userAgent.toLowerCase()
+export const UAString = 'MicroMessenger'.toLowerCase()
+export const ua = window.navigator.userAgent.toLowerCase()
 
-export let inWechat = () => {
+export function inWechat () {
   return ua.indexOf(UAString) > -1 || typeof window.wxuserAgent !== 'undefined'
 }
 
-export let checkWxVersion = () => {
+export function checkWxVersion () {
   var ua = window.navigator.userAgent,
       re  = new RegExp(UAString + '\/([0-9]{1,}[\\.0-9]{0,})', 'i'),
       rv
@@ -17,9 +17,7 @@ export let checkWxVersion = () => {
   return rv
 }
 
-export let actions = {}
-
-actions.close = (callback) => {
+export function close (callback) {
   let { WeixinJSBridge } = window
   if (!WeixinJSBridge) {
     console.warn(`[env: NOT_WECHAT]no WeixinJSBridge`)
