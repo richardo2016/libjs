@@ -1,5 +1,5 @@
 /* global describe, it, before */
-
+// NODE_ENV=test ./node_modules/.bin/mocha --compilers js:babel-core/register --colors -w ./test/built-in.spec.js
 import chai from 'chai';
 import {object as builtIn} from '../dist/ray.js';
 

@@ -382,23 +382,17 @@ function curry(fn) {
     return fn.apply(undefined, args);
   }
   return function curriedFn() {
-    var _console, _console2;
-
-    for (var _len2 = arguments.length, __in_args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-      __in_args[_key2] = arguments[_key2];
-    }
-
-    console.info('fix_args 2016', fn.length, args.length, __in_args.length);
-    (_console = console).info.apply(_console, ['fix_args 2017'].concat(args, __in_args));
 
     if (args.length >= fn.length) {
       return fn.apply(undefined, args);
     }
 
+    for (var _len2 = arguments.length, __in_args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+      __in_args[_key2] = arguments[_key2];
+    }
+
     var new_args = [].concat(args, __in_args);
 
-    console.info('fix_args 2018', fn.length, new_args.length, __in_args.length);
-    (_console2 = console).info.apply(_console2, ['fix_args 2019'].concat(_toConsumableArray(new_args), __in_args));
     if (new_args.length >= fn.length) {
       return fn.apply(undefined, _toConsumableArray(new_args));
     }
