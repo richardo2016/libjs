@@ -1,10 +1,13 @@
 /**
- * @apiDefine importDirectories
- *            this function can make it easy to import one directory's file as modules, you can
- *            filter the module_name, module's content before return the whole hash.
- * @apiParam  require.context(): webpackRequireContext result from 'require.context(regex|string, ...)' in webpack runtime,
- *            which has methods `keys` which returns one iterator for every files included
+ * this function can make it easy to import one directory's file as modules, you can
+ * filter the module_name, module's content before return the whole hash.
+ *
+ * @param      {require.context(webpackRequireContext)} webpackRequireContext result from 'require.context(regex|string, ...)' in webpack runtime, which has methods `keys` which returns one iterator for every files included
+ * @param      {hash} options options
+ *
+ * @returns    {hash} one hash object includes all module
  */
+
 export function importDirectories (webpackRequireContext = {}, options) {
   let direcotry = {}
   let {

@@ -1,5 +1,14 @@
 /**
- * 强制为字符串，至少返回空字符串
+ * @brief coerce one value to string, return empty-string at least
+ *
+ * @use_cases <br />
+ *
+ * ```javascript
+ *   coerceString(NaN) === 'NaN'
+ *   coerceString(undefined) === 'Undefined'
+ *   coerceString(null) === 'Null'
+ *   coerceString(0) === '0'
+ * ```
  */
 export function coerceString (string) {
   if (!string) string = String(string).toString()
@@ -9,14 +18,20 @@ export function coerceString (string) {
 }
 
 /**
- * 使得一个字符串首字母大写
+ * @brief capitalize one string
  *
- * capitalize('abc') === 'Abc'
- * capitalize('') === ''
- * capitalize(NaN) === 'NaN'
- * capitalize(undefined) === 'Undefined'
- * capitalize(null) === 'Null'
- * capitalize(0) === '0'
+ * @use_cases <br />
+ *
+ * ```javascript
+ *   capitalize('abc') === 'Abc'
+ *   capitalize('') === ''
+ *   capitalize(NaN) === 'NaN'
+ *   capitalize(undefined) === 'Undefined'
+ *   capitalize(null) === 'Null'
+ *   capitalize(0) === '0'
+ * ```
+ *
+ * @kind       primitives
  */
 export function capitalize (string) {
   if (!(string = coerceString(string))) return string
@@ -24,14 +39,20 @@ export function capitalize (string) {
 }
 
 /**
- * 使得中横线风格转化为驼峰风格
+ * @brief transfer kebab-style string to camel-style
  *
- * kebab2camel('abc-component') // abcComponent
- * kebab2camel('abc-com-ponent') // abcComPonent
- * kebab2camel('-abc-component') // AbcComponent
- * kebab2camel('-abc-component-') // AbcComponent
- * kebab2camel() // undefined
- * kebab2camel(null) // null
+ * @use_cases <br />
+ *
+ * ```javascript
+ *   kebab2camel('abc-component') === abcComponent
+ *   kebab2camel('abc-com-ponent') === abcComPonent
+ *   kebab2camel('-abc-component') === AbcComponent
+ *   kebab2camel('-abc-component-') === AbcComponent
+ *   kebab2camel() === undefined
+ *   kebab2camel(null) === null
+ * ```
+ *
+ * @kind       primitives
  */
 export function kebab2camel (string) {
   if (!(string = coerceString(string))) return string
@@ -41,16 +62,22 @@ export function kebab2camel (string) {
 }
 
 /**
- * 使得驼峰风格转化为中横线风格
+ * @brief transfer camel-style string to kebab-style
  *
- * camel2kebab('abcComponent') abc-component
- * camel2kebab('AbcComponent') abc-component
- * camel2kebab('Abccomponent') abccomponent
- * camel2kebab('AbccomponenT') abccomponen-t
- * camel2kebab('')
- * camel2kebab() undefined
- * camel2kebab(null) null
- * camel2kebab(undefined) undefined
+ * @use_cases <br />
+ *
+ * ```javascript
+ *   camel2kebab('abcComponent') abc-component
+ *   camel2kebab('AbcComponent') abc-component
+ *   camel2kebab('Abccomponent') abccomponent
+ *   camel2kebab('AbccomponenT') abccomponen-t
+ *   camel2kebab('')
+ *   camel2kebab() undefined
+ *   camel2kebab(null) null
+ *   camel2kebab(undefined) undefined
+ * ```
+ *
+ * @kind       primitives
  */
 export function camel2kebab (string, options) {
   if (!(string = coerceString(string))) return string
@@ -61,14 +88,20 @@ export function camel2kebab (string, options) {
 }
 
 /**
- * 使得下划线风格转化为驼峰风格
+ * @brief transfer underscore-style string to camel-style
  *
- * kebab2camel('abc_component') // abcComponent
- * kebab2camel('abc_com_ponent') // abcComPonent
- * kebab2camel('_abc_component') // AbcComponent
- * kebab2camel('_abc_component_') // AbcComponent
- * kebab2camel() // undefined
- * kebab2camel(null) // null
+ * @use_cases <br />
+ *
+ * ```javascript
+ *   underscore2camel('abc_component') === abcComponent
+ *   underscore2camel('abc_com_ponent') === abcComPonent
+ *   underscore2camel('_abc_component') === AbcComponent
+ *   underscore2camel('_abc_component_') === AbcComponent
+ *   underscore2camel() === undefined
+ *   underscore2camel(null) === null
+ * ```
+ *
+ * @kind       primitives
  */
 export function underscore2camel (string) {
   if (!(string = coerceString(string))) return string
@@ -78,16 +111,22 @@ export function underscore2camel (string) {
 }
 export const _2camel = underscore2camel
 /**
- * 使得驼峰风格转化为下划线风格
+ * @brief transfer camel-style string to underscore-style
  *
- * camel2kebab('abcComponent') abc_component
- * camel2kebab('AbcComponent') abc_component
- * camel2kebab('Abccomponent') abccomponent
- * camel2kebab('AbccomponenT') abccomponen_t
- * camel2kebab('')
- * camel2kebab() undefined
- * camel2kebab(null) null
- * camel2kebab(undefined) undefined
+ * @use_cases <br />
+ *
+ * ```javascript
+ *   camel2underscore('abcComponent') abc_component
+ *   camel2underscore('AbcComponent') abc_component
+ *   camel2underscore('Abccomponent') abccomponent
+ *   camel2underscore('AbccomponenT') abccomponen_t
+ *   camel2underscore('')
+ *   camel2underscore() undefined
+ *   camel2underscore(null) null
+ *   camel2underscore(undefined) undefined
+ * ```
+ *
+ * @kind       primitives
  */
 export function camel2underscore (string, options) {
   if (!(string = coerceString(string))) return string
