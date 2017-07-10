@@ -184,7 +184,6 @@ describe('测试 built-in/function 功能是否正确', () => {
       let mapPlusOne = curry(map, (x) => x + 1)
 
       let res = mapPlusOne([1, 2, 3, 4])
-      console.info('res is what ? ', res)
       expect(res[0]).to.be.equals(2)
       expect(res[1]).to.be.equals(3)
       expect(res[2]).to.be.equals(4)
@@ -193,12 +192,10 @@ describe('测试 built-in/function 功能是否正确', () => {
       let match = curry((what, str) => {
         return str.match(what)
       })
-      // let hasSpaces = match(/\s+/g, ' ');
-
-      // // console.info('hasSpaces is what?', hasSpaces)
-      // expect(hasSpaces[0]).to.be.equals(' ')
-      console.info('match(/\s+/g) is what?', match(/\s+/g))
       expect(typeof match(/\s+/g)).to.be.equals('function')
+
+      let hasSpaces = match(/\s+/g, ' ');
+      expect(hasSpaces[0]).to.be.equals(' ')
     })
   })
 })
