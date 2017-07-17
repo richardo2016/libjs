@@ -1,6 +1,6 @@
-import { secretifyObj, secretObj, solidifyObj } from '../node/object'
+import { secretifyObj, secretObj, solidifyObj } from '../built-in/object'
 import { ListPagination, Query, PaginationSrc } from './list-pagination.class'
-import { clearMap } from '../node/map'
+import { clearMap } from '../struct/map'
 
 export class AnoymousBase {
   static __mapTypes = {

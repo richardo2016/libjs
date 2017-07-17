@@ -1,13 +1,12 @@
 /* global describe, it, before */
 
 import chai from 'chai';
-import {string} from '../dist/rayjs.js';
+import {primitive} from '../dist/biz-strategy.js';
+const string = primitive.string;
 
 chai.expect();
 
 const expect = chai.expect;
-
-let lib;
 
 describe('测试字符串功能是否正确', () => {
   before(() => {
@@ -63,29 +62,83 @@ describe('测试字符串功能是否正确', () => {
   })
   const camel2kebab = string.camel2kebab;
   describe('camel2kebab', () => {
-    it(`camel2kebab('abcComponent') abc-component`, () => {
+    it(`camel2kebab('abcComponent') === abc-component`, () => {
       expect(camel2kebab('abcComponent')).to.be.equal('abc-component')
     })
-    it(`camel2kebab('AbcComponent') abc-component`, () => {
+    it(`camel2kebab('AbcComponent') === abc-component`, () => {
       expect(camel2kebab('AbcComponent')).to.be.equal('abc-component')
     })
-    it(`camel2kebab('Abccomponent') abccomponent`, () => {
+    it(`camel2kebab('Abccomponent') === abccomponent`, () => {
       expect(camel2kebab('Abccomponent')).to.be.equal('abccomponent')
     })
-    it(`camel2kebab('AbccomponenT') abccomponen-t`, () => {
+    it(`camel2kebab('AbccomponenT') === abccomponen-t`, () => {
       expect(camel2kebab('AbccomponenT')).to.be.equal('abccomponen-t')
     })
-    it(`camel2kebab('')`, () => {
+    it(`camel2kebab('') === ''`, () => {
       expect(camel2kebab('')).to.be.equal('')
     })
-    it(`camel2kebab() undefined`, () => {
+    it(`camel2kebab() === 'undefined'`, () => {
       expect(camel2kebab()).to.be.equal('undefined')
     })
-    it(`camel2kebab(null) null`, () => {
+    it(`camel2kebab(null) === 'null'`, () => {
+      expect(camel2kebab(null)).to.be.equal('null')
+    })
+    it(`camel2kebab(undefined) === 'undefined'`, () => {
       expect(camel2kebab(undefined)).to.be.equal('undefined')
     })
-    it(`camel2kebab(undefined) undefined`, () => {
-      expect(camel2kebab(null)).to.be.equal('null')
+  })
+
+  const _2camel = string._2camel;
+  describe('_2camel', () => {
+    it(`_2camel('abc_component') === 'abcComponent'`, () => {
+      expect(_2camel('abc_component')).to.be.equal('abcComponent')
+    });
+
+    it(`_2camel('abc_com_ponent') === 'abcComPonent'`, () => {
+      expect(_2camel('abc_com_ponent')).to.be.equal('abcComPonent')
+    });
+
+    it(`_2camel('_abc_component') === 'AbcComponent'`, () => {
+      expect(_2camel('_abc_component')).to.be.equal('AbcComponent')
+    });
+
+    it(`_2camel('_abc_component_') === 'AbcComponent'`, () => {
+      expect(_2camel('_abc_component_')).to.be.equal('AbcComponent')
+    });
+
+    it(`_2camel() === 'undefined'`, () => {
+      expect(_2camel()).to.be.equal('undefined')
+    });
+
+    it(`_2camel(null) === 'null'`, () => {
+      expect(_2camel(null)).to.be.equal('null')
+    });
+  })
+  const camel2_ = string.camel2_;
+  describe('camel2_', () => {
+    it(`camel2_('abcComponent') === 'abc_component'`, () => {
+      expect(camel2_('abcComponent')).to.be.equal('abc_component')
+    })
+    it(`camel2_('AbcComponent') === 'abc_component'`, () => {
+      expect(camel2_('AbcComponent')).to.be.equal('abc_component')
+    })
+    it(`camel2_('Abccomponent') === 'abccomponent'`, () => {
+      expect(camel2_('Abccomponent')).to.be.equal('abccomponent')
+    })
+    it(`camel2_('AbccomponenT') === 'abccomponen_t'`, () => {
+      expect(camel2_('AbccomponenT')).to.be.equal('abccomponen_t')
+    })
+    it(`camel2_('') === ''`, () => {
+      expect(camel2_('')).to.be.equal('')
+    })
+    it(`camel2_() === 'undefined'`, () => {
+      expect(camel2_()).to.be.equal('undefined')
+    })
+    it(`camel2_(null) === 'null'`, () => {
+      expect(camel2_(null)).to.be.equal('null')
+    })
+    it(`camel2_(undefined) === 'undefined'`, () => {
+      expect(camel2_(undefined)).to.be.equal('undefined')
     })
   })
 });

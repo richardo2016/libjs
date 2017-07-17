@@ -6,7 +6,9 @@ module.exports = {
   parserOptions: {
     sourceType: 'module'
   },
-
+  "env": {
+    "browser": true,
+  },
   "globals": {
     // "document": false,
     // "escape": false,
