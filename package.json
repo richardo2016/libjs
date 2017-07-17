@@ -1,6 +1,6 @@
 {
-  "name": "@xeen/js",
-  "version": "0.0.1",
+  "name": "@richardo2016/js",
+  "version": "0.0.1-rc.1",
   "description": "",
   "scripts": {
     "build": "webpack --env build",
@@ -41,10 +41,6 @@
     "mocha": "3.3.0",
     "webpack": "2.4.1",
     "yargs": "7.1.0"
-  },
-  "dependencies": {
-    "fetch-ie8": "^1.5.0",
-    "moment": "^2.18.1"
   },
   "engines": {
     "node": ">= 4.0.0",
