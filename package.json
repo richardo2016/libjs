@@ -1,6 +1,6 @@
 {
   "name": "@richardo2016/js",
-  "version": "0.0.1-rc.1",
+  "version": "0.0.1-rc.2",
   "description": "",
   "scripts": {
     "build": "webpack --env build",
@@ -12,7 +12,7 @@
     "richardo2016",
     "js"
   ],
-  "main": "dist/rayjs.js",
+  "main": "dist/rayjs.min.js",
   "repository": {
     "type": "git",
     "url": "git@github.com:richardo2016/libjs.git"
