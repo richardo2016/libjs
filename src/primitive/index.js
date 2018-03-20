@@ -12,6 +12,7 @@ export function coerce ({value, type, ...params}) {
     return
   }
 
+  let _type = typeof value
   switch (type) {
     default:
     case types.object:
@@ -19,9 +20,9 @@ export function coerce ({value, type, ...params}) {
     case types.undefined:
       return undefined
     case types.number:
-      if (typeof value === types.number) return value
+      if (_type === types.number && !isNaN(value)) return value
       value = parseFloat(value)
-      return !isNaN(value) ? value : undefined
+      return !isNaN(value) ? value : 0
     case types.string:
       value = value && value.toString()
       return value

@@ -94,11 +94,11 @@ function secretifyObjectProperty (object, property, descriptor = {}) {
   object = corceObject(object)
   if (!object) return
 
+  let { value, configurable = false, writable = false } = descriptor || {}
   if (!Object.defineProperty || !Object.getOwnPropertyDescriptor) {
     object[property] = value
     return object
   }
-  let { value, configurable = false, writable = false } = descriptor || {}
 
   let prop_descriptor = Object.getOwnPropertyDescriptor(object, property)
   let new_descriptor = { value: value === undefined ? object[property] : value, enumerable: false, configurable, writable }
@@ -198,7 +198,7 @@ export const checkItemObjs = (itemObjs, options) => {
 /**
  * filter invalid items by examination function filter func
  */
-export function mapObjects (items, callback = ({itemObj}) => itemObj) {
+export function mapObjects (items, handleEmptyItem = ({itemObj}) => itemObj) {
   if (items.length <= 1) {
     // return isItemObjsEmpty(isItemObjsEmpty) ? [{content: ''}] : items
     return items
@@ -208,7 +208,7 @@ export function mapObjects (items, callback = ({itemObj}) => itemObj) {
     let properties = Object.keys(items[index])
 
     if (properties.length <= 1 && !trimItemContent(items[index].content)) {
-      items[index] = callback({itemObj: items[index], properties, index})
+      items[index] = handleEmptyItem({itemObj: items[index], properties, index})
     }
   }
 
