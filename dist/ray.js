@@ -546,17 +546,17 @@ function secretifyObjectProperty(object, property) {
   object = corceObject(object);
   if (!object) return;
 
-  if (!Object.defineProperty || !Object.getOwnPropertyDescriptor) {
-    object[property] = value;
-    return object;
-  }
-
   var _ref3 = descriptor || {},
       value = _ref3.value,
       _ref3$configurable = _ref3.configurable,
       configurable = _ref3$configurable === undefined ? false : _ref3$configurable,
       _ref3$writable = _ref3.writable,
       writable = _ref3$writable === undefined ? false : _ref3$writable;
+
+  if (!Object.defineProperty || !Object.getOwnPropertyDescriptor) {
+    object[property] = value;
+    return object;
+  }
 
   var prop_descriptor = Object.getOwnPropertyDescriptor(object, property);
   var new_descriptor = { value: value === undefined ? object[property] : value, enumerable: false, configurable: configurable, writable: writable };
@@ -671,7 +671,7 @@ var checkItemObjs = function checkItemObjs(itemObjs, options) {
 };
 
 function mapObjects(items) {
-  var callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function (_ref7) {
+  var handleEmptyItem = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function (_ref7) {
     var itemObj = _ref7.itemObj;
     return itemObj;
   };
@@ -684,7 +684,7 @@ function mapObjects(items) {
     var properties = Object.keys(items[index]);
 
     if (properties.length <= 1 && !trimItemContent(items[index].content)) {
-      items[index] = callback({ itemObj: items[index], properties: properties, index: index });
+      items[index] = handleEmptyItem({ itemObj: items[index], properties: properties, index: index });
     }
   }
 
@@ -1370,6 +1370,7 @@ function coerce(_ref) {
     return;
   }
 
+  var _type = typeof value === 'undefined' ? 'undefined' : _typeof(value);
   switch (type) {
     default:
     case types.object:
@@ -1377,9 +1378,9 @@ function coerce(_ref) {
     case types.undefined:
       return undefined;
     case types.number:
-      if ((typeof value === 'undefined' ? 'undefined' : _typeof(value)) === types.number) return value;
+      if (_type === types.number && !isNaN(value)) return value;
       value = parseFloat(value);
-      return !isNaN(value) ? value : undefined;
+      return !isNaN(value) ? value : 0;
     case types.string:
       value = value && value.toString();
       return value;
