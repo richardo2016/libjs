@@ -1,4 +1,5 @@
-exports.object = {
+exports.builtIn = {
+  date: require('./built-in/date'),
   array: require('./built-in/array'),
   object: require('./built-in/object'),
   function: require('./built-in/function')

@@ -1,9 +1,7 @@
-let {DEBUG = true} = global || window || {}
-
 export class Logger {
   constructor (level) {
     if (level === undefined) {
-      level = DEBUG ? 'debug' : 'info'
+      level = 'info'
     }
     this.level = level
   }
