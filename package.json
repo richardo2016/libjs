@@ -45,8 +45,7 @@
     "yargs": "7.1.0"
   },
   "dependencies": {
-    "fetch-ie8": "^1.5.0",
-    "moment": "^2.18.1"
+    "fetch-ie8": "^1.5.0"
   },
   "engines": {
     "node": ">= 4.0.0",
