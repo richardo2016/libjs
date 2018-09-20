@@ -52,3 +52,5 @@ _ReSharper*/
 # dist/*
 conf.d/*
 .gitmodules
+
+lib
