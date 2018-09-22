@@ -1,15 +1,20 @@
 const util = require('util');
 const path = require('path');
 
+const { default: rollup, fibjsResolve, getCustomizedVBox } = require('fib-rollup')
+const vbox = getCustomizedVBox({
+    prettier: {
+        format: (content) => content
+    }
+})
+const { registerTsCompiler } = require('fib-typify')
+
 const commonjs = require('rollup-plugin-commonjs');
-const typescript = require('rollup-plugin-typescript');
+const typescript = vbox.require('rollup-plugin-typescript', __dirname);
 const json = require('rollup-plugin-json');
 const replace = require('rollup-plugin-replace');
 const alias = require('rollup-plugin-alias');
 const tsCompiler = require('typescript')
-
-const { default: rollup, fibjsResolve, getCustomizedVBox } = require('fib-rollup')
-const { registerTsCompiler } = require('fib-typify')
 
 function _resolve (modulePath = '') {
     return path.resolve(__dirname, '../', modulePath)
@@ -21,14 +26,9 @@ const rollupGlobals = {
 }
 
 async function rollupCompiler (srcpath, targetpath, otherCfg) {
-    const vbox = getCustomizedVBox({
-        prettier: {
-            format: (content) => content
-        }
-    })
 
     registerTsCompiler(vbox)
-    
+
     const bundle = await rollup.rollup({
         input: srcpath,
         external: [
