@@ -1,4 +1,4 @@
-import { types, coerce } from './'
+import { types, coerce } from './_common'
 
 /**
  * @brief coerce one value to number
