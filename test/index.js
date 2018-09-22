@@ -1,4 +1,10 @@
-require('./built-in.spec')
-require('./constant.spec')
-require('./primitive.number.spec')
-require('./primitive.string.spec')
+// const test = require('test')
+// test.setup()
+
+run('./built-in.spec')
+run('./constant.spec')
+run('./primitive.number.spec')
+run('./primitive.string.spec')
+
+// test.run(console.DEBUG)
+// process.exit();
