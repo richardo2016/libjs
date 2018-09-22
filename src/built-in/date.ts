@@ -1,5 +1,10 @@
-// import 'core-js/modules/es7.string.pad-start'
-// import 'core-js/modules/es7.string.pad-end'
+function padStart(str = '', len = 0, fill = '0') {
+  while(str.length < len) {
+    str = fill + str
+  }
+
+  return str
+}
 
 export function ensureDate (dateInstance: any) {
   if (!dateInstance) return
@@ -13,12 +18,12 @@ export function ensureDate (dateInstance: any) {
 
 export function padMonth (string: string) {
   string = string + ''
-  return string.padStart(2, '0')
+  return padStart(string, 2, '0')
 }
 
 export function padDate (string: string) {
   string = string + ''
-  return string.padStart(2, '0')
+  return padStart(string, 2, '0')
 }
 
 export const padHours = padDate
@@ -27,7 +32,7 @@ export const padSeconds = padDate
 
 export function padMilliseconds (string: string) {
   string = string + ''
-  return string.padStart(3, '0')
+  return padStart(string, 3, '0')
 }
 
 export function slashLocalDateTime (date: any) {

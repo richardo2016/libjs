@@ -53,5 +53,5 @@ _ReSharper*/
 conf.d/*
 .gitmodules
 
-lib
+lib/*
 package-lock.json
