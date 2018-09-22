@@ -54,3 +54,4 @@ conf.d/*
 .gitmodules
 
 lib
+package-lock.json

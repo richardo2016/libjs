@@ -4,8 +4,10 @@
   "description": "",
   "scripts": {
     "build:rollup": "fibjs ./build/rollup.js",
-    "build": "fibjs ./build/typify",
+    "build:typify": "fibjs ./build/typify",
+    "build": "npm run build:rollup && npm run build:typify",
     "test": "fibjs ./test",
+    "ci": "npm run test",
     "prepublishOnly": "npm run build"
   },
   "keywords": [
@@ -25,7 +27,9 @@
     "rollup-plugin-commonjs": "^9.1.8",
     "rollup-plugin-json": "^3.1.0",
     "rollup-plugin-replace": "^2.0.0",
-    "rollup-plugin-typescript": "^1.0.0"
+    "rollup-plugin-typescript": "^1.0.0",
+    "tslib": "^1.9.3",
+    "typescript": "^3.0.3"
   },
   "engines": {
     "fibjs": ">= 0.21.0",
