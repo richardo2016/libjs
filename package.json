@@ -7,6 +7,7 @@
     "build:typify": "fibjs ./build/typify",
     "build": "npm run build:rollup && npm run build:typify",
     "test": "fibjs ./test",
+    "preci": "npm run build",
     "ci": "npm run test",
     "prepublishOnly": "npm run build",
     "postinstall": "mkdir -p node_modules/rollup-plugin-typescript/dist/node_modules && cp -r node_modules/tslib node_modules/rollup-plugin-typescript/dist/node_modules/"
@@ -23,7 +24,9 @@
   "author": "Chen Lei <richardo2016@gmail.com>",
   "license": "MIT",
   "devDependencies": {
+    "@fibjs/ci": "^2.1.0",
     "fib-rollup": "0.0.1",
+    "fib-typify": "^0.3.0",
     "rollup-plugin-alias": "^1.4.0",
     "rollup-plugin-commonjs": "^9.1.8",
     "rollup-plugin-json": "^3.1.0",
@@ -41,7 +44,11 @@
     "last 2 versions",
     "not ie <= 8"
   ],
-  "dependencies": {
-    "fib-typify": "^0.3.0"
+  "ci": {
+    "type": "travis",
+    "version": [
+      "0.26.0",
+      "0.26.1"
+    ]
   }
 }
