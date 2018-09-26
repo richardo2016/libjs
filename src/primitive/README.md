@@ -49,7 +49,7 @@ transform kebab-style string to camel-style
 ```
 <a name="camel2kebab"></a>
 
-**## **camel2kebab**
+**camel2kebab**
 
 transform camel-style string to kebab-style
 
