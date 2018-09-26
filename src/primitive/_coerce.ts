@@ -20,7 +20,13 @@ export function coerce ({value, type}: CorceFnTypeOptions) {
   switch (type) {
     default:
     case types.object:
-      break
+      if (value === null) return {}
+
+      if (typeof value !== 'object') {
+        console.warn('non-empty object expected')
+        return {}
+      }
+      return value
     case types.undefined:
       return undefined
     case types.number:
@@ -28,9 +34,23 @@ export function coerce ({value, type}: CorceFnTypeOptions) {
       value = parseFloat(value)
       return !isNaN(value) ? value : undefined
     case types.string:
-      value = value && value.toString()
+      if (!value || typeof value !== 'string') {
+        value = String(value).toString()
+      }
       return value
     case types.boolean:
       return !!value
   }
+}
+
+export function coerceString (value: any) {
+  return coerce({value, type: types.string})
+}
+
+export function coerceNumber (value: any) {
+  return coerce({value, type: types.number})
+}
+
+export function corceObject (value: object): object {
+  return coerce({value, type: types.object})
 }

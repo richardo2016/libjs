@@ -35,24 +35,6 @@ export function padMilliseconds (string: string) {
   return padStart(string, 3, '0')
 }
 
-export function slashLocalDateTime (date: any) {
-  if (!(date = ensureDate(date))) return
-  return `${date.getFullYear()}/${padMonth(date.getMonth() + 1)}/${padDate(date.getDate())}`
-}
-
-export function kebabLocalDateTime (date: any) {
-  if (!(date = ensureDate(date))) return
-  return `${date.getFullYear()}-${padMonth(date.getMonth() + 1)}-${padDate(date.getDate())}`
-}
-
-export function getDiffDays (beginTime: any, endTime: any) {
-  if (!(beginTime = ensureDate(beginTime)) || !(endTime = ensureDate(endTime))) {
-    return 0
-  }
-  let diffMs = endTime - beginTime
-  return Math.floor(diffMs / (86400 * 1e3))
-}
-
 /**
  * @brief parse one Date(if it is)
  *
@@ -71,4 +53,22 @@ export function parseDate (date: any) {
     padded_seconds: padSeconds(date.getSeconds()),
     padded_milliseconds: padMilliseconds(date.getMilliseconds())
   }
+}
+
+export function slashLocalDateTime (date: any) {
+  if (!(date = ensureDate(date))) return
+  return `${date.getFullYear()}/${padMonth(date.getMonth() + 1)}/${padDate(date.getDate())}`
+}
+
+export function kebabLocalDateTime (date: any) {
+  if (!(date = ensureDate(date))) return
+  return `${date.getFullYear()}-${padMonth(date.getMonth() + 1)}-${padDate(date.getDate())}`
+}
+
+export function getDiffDays (beginTime: any, endTime: any) {
+  if (!(beginTime = ensureDate(beginTime)) || !(endTime = ensureDate(endTime))) {
+    return 0
+  }
+  let diffMs = endTime - beginTime
+  return Math.floor(diffMs / (86400 * 1e3))
 }

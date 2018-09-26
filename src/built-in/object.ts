@@ -1,12 +1,4 @@
-function corceObject (obj: object): object {
-  if (obj === null) return {}
-
-  if (typeof obj !== 'object') {
-    console.warn('non-empty object expected')
-    return {}
-  }
-  return obj
-}
+import { corceObject } from '../primitive/_coerce'
 
 /**
  * @brief transform list(array) to keymirror-style hash
@@ -81,16 +73,12 @@ export function ofObject (value: any, obj: object, options?: {strict?: boolean})
   return ofIt
 }
 
-export function view (object: object) {
-  return Object.getOwnPropertyDescriptors(object)
-}
-
-export function viewField (object: object, property: PropertyKey) {
+export function getDescField (object: object, property: PropertyKey) {
   return Object.getOwnPropertyDescriptor(object, property)
 }
 
-export function ofChangeable (object: object, property: PropertyKey) {
-  return view(object).writable
+export function isPropertyChangeable (object: object, property: PropertyKey) {
+  return getDescField(object, property).writable
 }
 
 function secretifyObjectProperty (object: object, property: PropertyKey, newDescriptor: PropertyDescriptor = {}) {
