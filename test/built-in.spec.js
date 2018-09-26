@@ -265,6 +265,11 @@ function testor (mod, prefixer = '') {
         assert.deepEqual(result_2.padded_milliseconds, t_milliseconds)
       })
 
+      it(`joinFormatDate`, () => {
+        const joinFormatDate = mod.date.joinFormatDate
+        assert.deepEqual(joinFormatDate(testDateStr, '='), `${t_year}=${t_month}=${t_date}`)
+      })
+
       it(`slashLocalDate`, () => {
         const slashLocalDate = mod.date.slashLocalDate
         assert.deepEqual(slashLocalDate(testDateStr), `${t_year}/${t_month}/${t_date}`)

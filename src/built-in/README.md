@@ -45,11 +45,12 @@ try to parse one variable as date with coercing it with 'ensureDate'
 ```javascript
 const { parseDate } = require('@richardo2016/libjs').builtIn.date
 
-function slashLocalDateTime (date: any) {
-  if (!(date = ensureDate(date))) return
-  return `${date.getFullYear()}/${padMonth(date.getMonth() + 1)}/${padDate(date.getDate())}`
+function slashLocalDate (date) {
+  const info = parseDate(date)
+  if (!info) return info
+  return `${info.padded_year}/${info.padded_month}/${info.padded_date}`
 }
 
-slashLocalDateTime('2018-05-13') // '2018-05-13'
-slashLocalDateTime(null) // undefined
+slashLocalDate('2018-05-13') // '2018-05-13'
+slashLocalDate(null) // undefined
 ```

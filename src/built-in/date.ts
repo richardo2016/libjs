@@ -56,14 +56,23 @@ export function parseDate (date: any) {
   }
 }
 
+export function joinFormatDate (date: any, joinStr: string = '-') {
+  const info = parseDate(date)
+  if (!info) return info
+
+  return [
+    info.padded_year,
+    info.padded_month,
+    info.padded_date
+  ].join(joinStr)
+}
+
 export function slashLocalDate (date: any) {
-  if (!(date = ensureDate(date))) return
-  return `${date.getFullYear()}/${padMonth(date.getMonth() + 1)}/${padDate(date.getDate())}`
+  return joinFormatDate(date, '/')
 }
 
 export function kebabLocalDate (date: any) {
-  if (!(date = ensureDate(date))) return
-  return `${date.getFullYear()}-${padMonth(date.getMonth() + 1)}-${padDate(date.getDate())}`
+  return joinFormatDate(date, '-')
 }
 
 export function getDiffDays (beginTime: any, endTime: any) {
