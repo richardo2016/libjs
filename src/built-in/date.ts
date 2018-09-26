@@ -7,7 +7,8 @@ function padStart(str = '', len = 0, fill = '0') {
 }
 
 export function ensureDate (dateInstance: any) {
-  if (!dateInstance) return
+  if (dateInstance === null || dateInstance === undefined) return
+
   if (dateInstance instanceof Date) return dateInstance
   dateInstance = new Date(dateInstance)
   if (dateInstance + '' === 'Invalid Date') return
@@ -55,12 +56,12 @@ export function parseDate (date: any) {
   }
 }
 
-export function slashLocalDateTime (date: any) {
+export function slashLocalDate (date: any) {
   if (!(date = ensureDate(date))) return
   return `${date.getFullYear()}/${padMonth(date.getMonth() + 1)}/${padDate(date.getDate())}`
 }
 
-export function kebabLocalDateTime (date: any) {
+export function kebabLocalDate (date: any) {
   if (!(date = ensureDate(date))) return
   return `${date.getFullYear()}-${padMonth(date.getMonth() + 1)}-${padDate(date.getDate())}`
 }
@@ -71,4 +72,17 @@ export function getDiffDays (beginTime: any, endTime: any) {
   }
   let diffMs = endTime - beginTime
   return Math.floor(diffMs / (86400 * 1e3))
+}
+
+export function zoneOffsetInfo (datetime: any = new Date) {
+  datetime = ensureDate(datetime)
+  if (!datetime) return null
+  const offsetMinutes = datetime.getTimezoneOffset()
+
+  return {
+    offset_hours: offsetMinutes / 60,
+    offset_minutes: offsetMinutes,
+    offset_seconds: offsetMinutes * 60,
+    offset_milliseconds: offsetMinutes * 60 * 1000,
+  }
 }

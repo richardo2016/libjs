@@ -73,12 +73,16 @@ export function ofObject (value: any, obj: object, options?: {strict?: boolean})
   return ofIt
 }
 
-export function getDescField (object: object, property: PropertyKey) {
+export function viewObjProps (object: object) {
+  return (Object as any).getOwnPropertyDescriptors(object)
+}
+
+export function viewObjField (object: object, property: PropertyKey) {
   return Object.getOwnPropertyDescriptor(object, property)
 }
 
 export function isPropertyChangeable (object: object, property: PropertyKey) {
-  return getDescField(object, property).writable
+  return viewObjField(object, property).writable
 }
 
 function secretifyObjectProperty (object: object, property: PropertyKey, newDescriptor: PropertyDescriptor = {}) {
