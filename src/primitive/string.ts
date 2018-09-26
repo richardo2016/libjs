@@ -1,20 +1,5 @@
-/**
- * @brief coerce one value to string, return empty-string at least
- *
- * @use_cases <br />
- *
- * ```javascript
- *   coerceString(NaN) === 'NaN'
- *   coerceString(undefined) === 'Undefined'
- *   coerceString(null) === 'null'
- *   coerceString(0) === '0'
- * ```
- */
-export function coerceString (string: any) {
-  if (!string) string = String(string).toString()
-
-  return string
-}
+import { coerceString } from './_coerce'
+export const coerce = coerceString
 
 /**
  * @brief capitalize one string

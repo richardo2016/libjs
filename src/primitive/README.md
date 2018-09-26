@@ -1,18 +1,29 @@
-## Functions
+## Primitive Module
 
-<dl>
-<dt><a href="#coerceNumber">coerceNumber(value)</a> ⇒</dt>
-<dd></dd>
-<dt><a href="#coerceString">coerceString()</a></dt>
-<dd></dd>
-</dl>
+### Coerce About
 
-<a name="capitalize"></a>
+**coerceString()**
+----
 
-## capitalize
-**Kind**: global primitives  
-**Brief**: capitalize one string  
-**Use_cases**: <br />
+coerce one value to string, return empty-string at least
+
+view details in [spec](../../test/primitive.string.spec.js)
+
+**coerceNumber(value)**
+----
+
+coerce one value to number.
+
+if the value cannot be parsed as number, return `undefined`.
+
+view details in [spec](../../test/primitive.number.spec.js)
+
+### String Utils
+
+**capitalize**
+----
+
+capitalize one string
 
 ```javascript
   capitalize('abc') === 'Abc'
@@ -21,93 +32,63 @@
   capitalize(undefined) === 'Undefined'
   capitalize(null) === 'Null'
   capitalize(0) === '0'
-```  
-<a name="kebab2camel"></a>
+```
 
-## kebab2camel
-**Kind**: global primitives  
-**Brief**: transfer kebab-style string to camel-style  
-**Use_cases**: <br />
+**kebab2camel**
+----
+
+transform kebab-style string to camel-style
 
 ```javascript
-  kebab2camel('abc-component') === abcComponent
-  kebab2camel('abc-com-ponent') === abcComPonent
-  kebab2camel('-abc-component') === AbcComponent
-  kebab2camel('-abc-component-') === AbcComponent
+  kebab2camel('abc-component') === 'abcComponent'
+  kebab2camel('abc-com-ponent') === 'abcComPonent'
+  kebab2camel('-abc-component') === 'AbcComponent'
+  kebab2camel('-abc-component-') === 'AbcComponent'
   kebab2camel() === undefined
   kebab2camel(null) === null
-```  
+```
 <a name="camel2kebab"></a>
 
-## camel2kebab
-**Kind**: global primitives  
-**Brief**: transfer camel-style string to kebab-style  
-**Use_cases**: <br />
+**## **camel2kebab**
+
+transform camel-style string to kebab-style
 
 ```javascript
-  camel2kebab('abcComponent') abc-component
-  camel2kebab('AbcComponent') abc-component
-  camel2kebab('Abccomponent') abccomponent
-  camel2kebab('AbccomponenT') abccomponen-t
-  camel2kebab('')
-  camel2kebab() undefined
-  camel2kebab(null) null
-  camel2kebab(undefined) undefined
-```  
-<a name="underscore2camel"></a>
+  camel2kebab('abcComponent') === 'abc-component'
+  camel2kebab('AbcComponent') === 'abc-component'
+  camel2kebab('Abccomponent') === 'abccomponent'
+  camel2kebab('AbccomponenT') === 'abccomponen-t'
+  camel2kebab('') === ''
+  camel2kebab() === undefined
+  camel2kebab(null) === null
+  camel2kebab(undefined) === undefined
+```
+**underscore2camel**
+----
 
-## underscore2camel
-**Kind**: global primitives  
-**Brief**: transfer underscore-style string to camel-style  
-**Use_cases**: <br />
+transform underscore-style string to camel-style
 
 ```javascript
-  underscore2camel('abc_component') === abcComponent
-  underscore2camel('abc_com_ponent') === abcComPonent
-  underscore2camel('_abc_component') === AbcComponent
-  underscore2camel('_abc_component_') === AbcComponent
+  underscore2camel('abc_component') === 'abcComponent'
+  underscore2camel('abc_com_ponent') === 'abcComPonent'
+  underscore2camel('_abc_component') === 'AbcComponent'
+  underscore2camel('_abc_component_') === 'AbcComponent'
   underscore2camel() === undefined
   underscore2camel(null) === null
-```  
+```
 <a name="camel2underscore"></a>
 
-## camel2underscore
-**Kind**: global primitives  
-**Brief**: transfer camel-style string to underscore-style  
-**Use_cases**: <br />
+**camel2underscore**
+----
+transform camel-style string to underscore-style
 
 ```javascript
-  camel2underscore('abcComponent') abc_component
-  camel2underscore('AbcComponent') abc_component
-  camel2underscore('Abccomponent') abccomponent
-  camel2underscore('AbccomponenT') abccomponen_t
+  camel2underscore('abcComponent') === 'abc_component'
+  camel2underscore('AbcComponent') === 'abc_component'
+  camel2underscore('Abccomponent') === 'abccomponent'
+  camel2underscore('AbccomponenT') === 'abccomponen_t'
   camel2underscore('')
   camel2underscore() undefined
   camel2underscore(null) null
   camel2underscore(undefined) undefined
-```  
-<a name="coerceNumber"></a>
-
-## coerceNumber(value) ⇒
-**Kind**: global function  
-**Returns**: value result value  
-**Brief**: coerce one value to number  
-**Details**: if the value cannot be parse to number, return `undefined`.  
-
-| Param | Description |
-| --- | --- |
-| value | input value |
-
-<a name="coerceString"></a>
-
-## coerceString()
-**Kind**: global function  
-**Brief**: coerce one value to string, return empty-string at least  
-**Use_cases**: <br />
-
-```javascript
-  coerceString(NaN) === 'NaN'
-  coerceString(undefined) === 'Undefined'
-  coerceString(null) === 'Null'
-  coerceString(0) === '0'
-```  
+```

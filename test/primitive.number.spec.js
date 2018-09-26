@@ -5,10 +5,7 @@ test.setup();
 function testor (mod, prefixer = '') {
   const number = mod.number;
   describe(`${prefixer} primitive.number`, () => {
-    before(() => {
-    });
-
-    const coerceNumber = number.coerceNumber;
+    const coerceNumber = number.coerce;
     describe('coerceNumber', () => {
       it(`coerceNumber('abc') === undefined`, () => {
         assert.equal(coerceNumber('abc'), undefined)
