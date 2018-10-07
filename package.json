@@ -25,6 +25,7 @@
   "license": "MIT",
   "devDependencies": {
     "@fibjs/ci": "^2.1.0",
+    "@types/fibjs": "^0.26.4",
     "fib-rollup": "0.0.1",
     "fib-typify": "^0.3.0",
     "rollup-plugin-alias": "^1.4.0",

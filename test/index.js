@@ -7,5 +7,7 @@ run('./struct.spec')
 run('./primitive.number.spec')
 run('./primitive.string.spec')
 
+run('./platform.spec')
+
 // test.run(console.DEBUG)
 // process.exit();
