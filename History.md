@@ -1,7 +1,14 @@
 
-v0.0.1 / 2018-09-26
+v0.0.2 / 2018-11-13
 ==================
 
+  * upgrade dependencies, and fix build process.
+  * update README.md
+
+v0.0.1 / 2018-09-26
+===================
+
+  * Release v0.0.1
   * add ci config.
   * little fix.
   * [built-in/date] add 'joinFormatDate'
