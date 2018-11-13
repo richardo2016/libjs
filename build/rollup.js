@@ -1,7 +1,7 @@
 const util = require('util');
 const path = require('path');
 
-const { default: rollup, fibjsResolve, getCustomizedVBox } = require('fib-rollup')
+const { default: rollup, plugins, getCustomizedVBox } = require('fib-rollup')
 const vbox = getCustomizedVBox({
     prettier: {
         format: (content) => content
@@ -14,7 +14,9 @@ const typescript = vbox.require('rollup-plugin-typescript', __dirname);
 const json = require('rollup-plugin-json');
 const replace = require('rollup-plugin-replace');
 const alias = require('rollup-plugin-alias');
-const tsCompiler = require('typescript')
+const buble = require('rollup-plugin-buble');
+
+const tsCompilerOptions = require('../tsconfig.json').compilerOptions;
 
 function _resolve (modulePath = '') {
     return path.resolve(__dirname, '../', modulePath)
@@ -22,8 +24,7 @@ function _resolve (modulePath = '') {
 
 const extensions = ['.ts', '.js', '.json']
 
-const rollupGlobals = {
-}
+const rollupGlobals = {}
 
 async function rollupCompiler (srcpath, targetpath, otherCfg) {
 
@@ -31,10 +32,9 @@ async function rollupCompiler (srcpath, targetpath, otherCfg) {
 
     const bundle = await rollup.rollup({
         input: srcpath,
-        external: [
-        ]
-        .concat(Object.keys(rollupGlobals))
-        .concat(util.buildInfo().modules),
+        external: []
+          .concat(Object.keys(rollupGlobals))
+          .concat(util.buildInfo().modules),
         plugins: [
             replace({
                 __DEV__: !!process.env.IMT_DEBUG,
@@ -43,32 +43,30 @@ async function rollupCompiler (srcpath, targetpath, otherCfg) {
             alias({
                 resolve: extensions
             }),
-            typescript({
-                typescript: tsCompiler
-            }),
             json(),
-            fibjsResolve({
-                // vbox,
+            plugins['rollup-plugin-fibjs-resolve']({
                 extensions,
                 jsnext: true,
                 browser: true
             }),
-            commonjs()
+            buble(),
+            // typescript({
+            //   ...tsCompilerOptions,
+            //   typescript: require('typescript'),
+            //   tslib: require('tslib')
+            // }),
+            commonjs(),
+            plugins['rollup-plugin-uglify-js']()
         ],
         ...otherCfg
     }).catch(e => console.error(e.stack))
-
 
     console.log(`========generating: ${srcpath} --> ${targetpath} ==========`);
 
     await bundle.write({
         file: targetpath,
-        // 'iife'
-        // format: 'umd', // ,
         format: 'umd',
-        name: 'RayJS',
-        // globals: {
-        // }
+        name: 'RayJS'
     }).catch(e => {
         console.error('[e] write', e.stack)
     });
@@ -77,6 +75,6 @@ async function rollupCompiler (srcpath, targetpath, otherCfg) {
 }
 
 await rollupCompiler(
-    _resolve('./src/index.ts'),
+    _resolve('./lib/cjs/index.js'),
     _resolve('./lib/umd/index.js')
 )

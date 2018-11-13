@@ -5,12 +5,13 @@
     "lib": [
       "dom",
       "es5",
+      "es6",
       "es2015.promise",
       "es7",
       "es2017",
       "es2017.object"
     ],
-    "module": "es2015",
+    "module": "CommonJS",
     "moduleResolution": "node",
     "isolatedModules": false,
     "experimentalDecorators": true,
@@ -21,7 +22,6 @@
     "suppressImplicitAnyIndexErrors": true,
     "allowJs": true,
 
-    // paths
     "baseUrl": "./",
     "paths": {
     }

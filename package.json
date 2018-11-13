@@ -5,12 +5,12 @@
   "scripts": {
     "build:rollup": "fibjs ./build/rollup.js",
     "build:typify": "fibjs ./build/typify",
-    "build": "npm run build:rollup && npm run build:typify",
+    "build": "npm run build:typify && npm run build:rollup",
     "test": "fibjs ./test",
     "preci": "npm run build",
     "ci": "npm run test",
     "prepublishOnly": "npm run build",
-    "postinstall": "mkdir -p node_modules/rollup-plugin-typescript/dist/node_modules && cp -r node_modules/tslib node_modules/rollup-plugin-typescript/dist/node_modules/"
+    "xpostinstall": "mkdir -p node_modules/rollup-plugin-typescript/dist/node_modules && cp -r node_modules/tslib node_modules/rollup-plugin-typescript/dist/node_modules/"
   },
   "keywords": [
     "richardo2016",
@@ -25,15 +25,16 @@
   "license": "MIT",
   "devDependencies": {
     "@fibjs/ci": "^2.1.0",
-    "fib-rollup": "0.0.1",
-    "fib-typify": "^0.3.0",
+    "fib-rollup": "^0.2.2",
+    "fib-typify": "^0.3.1",
     "rollup-plugin-alias": "^1.4.0",
-    "rollup-plugin-commonjs": "^9.1.8",
+    "rollup-plugin-buble": "^0.19.4",
+    "rollup-plugin-commonjs": "^9.2.0",
     "rollup-plugin-json": "^3.1.0",
-    "rollup-plugin-replace": "^2.0.0",
+    "rollup-plugin-replace": "^2.1.0",
     "rollup-plugin-typescript": "^1.0.0",
     "tslib": "^1.9.3",
-    "typescript": "^3.0.3"
+    "typescript": "^3.1.6"
   },
   "engines": {
     "fibjs": ">= 0.21.0",
